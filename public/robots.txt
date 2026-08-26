@@ -1,0 +1,8 @@
+# beta.projectnextech.org is a staging site running placeholder content.
+# Keeping it out of search results avoids competing with the real site and
+# avoids indexing copy that is not final.
+#
+# DELETE THIS FILE (or flip to Allow) before this build serves the real
+# projectnextech.org, or the live site will be invisible to search engines.
+User-agent: *
+Disallow: /

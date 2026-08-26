@@ -1,49 +1,545 @@
+/* ---------------------------------------------------------------------------
+   Breakpoints
+
+   Custom properties are illegal in media query *conditions*, so these cannot be
+   ordinary tokens. postcss-custom-media resolves them at build time, letting
+   module files write `@media (--lg)`. The four values are Tailwind's defaults,
+   which the prototype used throughout — they are kept identical so nothing
+   shifts during the port.
+
+   ⚠️ Article.tsx hardcodes '(min-width: 1024px)' in JS to drive its rail
+   layout. That constant and --lg must stay equal or the rail silently breaks.
+--------------------------------------------------------------------------- */
+@custom-media --sm (min-width: 640px);
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 1024px);
+@custom-media --xl (min-width: 1280px);
+
+/* ---------------------------------------------------------------------------
+   PNT design tokens
+   ---------------------------------------------------------------------------
+   Two layers, deliberately:
+
+   1. BRAND palette (--pnt-*) — fixed hex values that never change between
+      light and dark mode. These are the organization's colors.
+   2. SEMANTIC tokens (--bg, --text, ...) — what components actually consume.
+      Dark mode is the default and lives on :root.
+
+   No component may ever reference a --pnt-* value or a raw hex directly;
+   always go through a semantic token. Under CSS Modules this is easy to
+   enforce — grep a *.module.css file for '#'.
+--------------------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* -- Brand palette (theme-independent) -- */
+  --pnt-orange: #f24c02;
+  --pnt-orange-soft: #ff6b2c; /* hover/brighter on dark surfaces */
+  --pnt-orange-dim: #b83a05; /* pressed / low-emphasis */
+  --pnt-blue: #4083cc;
+  --pnt-blue-soft: #5c9de0; /* hover/brighter on dark surfaces */
+  --pnt-blue-dim: #2f6299; /* pressed / low-emphasis */
+
+  /* Third-party brand color, not a theme color — used only for the Discord
+     logo, which must stay recognizably Discord's own blurple. */
+  --brand-discord: #5865f2;
+
+  /* Sponsor tier colors (used on the About page partner cards) */
+  --tier-bronze: #cd7f32;
+  --tier-silver: #b8bcc4;
+  --tier-gold: #d4a017;
+
+  /* -- Semantic tokens: DARK (default) -- */
+  --bg: #0d0e10;
+  --surface: #141619;
+  --surface-raised: #1b1e22;
+  --surface-sunken: #090a0b;
+
+  --border: #282c32;
+  --border-strong: #3a3f47;
+
+  --heading: #f4f5f6;
+  --text: #dfe2e6;
+  --text-muted: #98a0a9;
+  --text-faint: #6b737c;
+
+  --accent: var(--pnt-orange);
+  --accent-hover: var(--pnt-orange-soft);
+  --accent-alt: var(--pnt-blue-soft);
+  --accent-alt-hover: #7fb4ea;
+
+  /* Translucent accent washes for highlight blocks and tags */
+  --accent-wash: rgb(242 76 2 / 0.12);
+  --accent-alt-wash: rgb(64 131 204 / 0.14);
+
+  color-scheme: dark;
+
+  /* -- Typography --
+     Inter is the primary face. Space Grotesk is reserved for headings and
+     accent text; JetBrains Mono for labels, dates, course codes, and code.
+     Per the brief, the words "Project NexTech" are ALWAYS set in Inter.
+
+     The --font-*-src variables are injected by next/font in layout.tsx. In the
+     prototype these lived inside Tailwind's `@theme inline` block; as plain
+     custom properties they behave identically and no consumer changes. */
+  --font-sans: var(--font-sans-src), system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-display-src), var(--font-sans-src), system-ui, sans-serif;
+  --font-mono: var(--font-mono-src), ui-monospace, 'Cascadia Code', monospace;
+
+  /* Small-radius or sharp only — the brief explicitly rules out bubbly corners. */
+  --radius-xs: 1px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ---------------------------------------------------------------------------
+   Semantic tokens: LIGHT
+
+   Only the semantic layer is redefined — the brand palette above is unchanged.
+
+   The same values appear twice on purpose, and plain CSS has no way to avoid
+   it: once for "system prefers light and the visitor has not chosen dark", and
+   once for "the visitor explicitly chose light". KEEP THE TWO BLOCKS IN SYNC.
+
+   Note --accent-alt reverts to the true PNT blue here. The lifted #5c9de0
+   exists only because the real brand blue is too dim on dark surfaces; on a
+   white ground the actual brand color is correct.
+--------------------------------------------------------------------------- */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --bg: #ffffff;
+    --surface: #f7f8f9;
+    --surface-raised: #ffffff;
+    --surface-sunken: #eef0f2;
+
+    --border: #e3e6ea;
+    --border-strong: #c6cbd2;
+
+    --heading: #0d0e10;
+    --text: #2b2f36;
+    --text-muted: #5c636d;
+    --text-faint: #868d97;
+
+    --accent: var(--pnt-orange);
+    --accent-hover: var(--pnt-orange-dim);
+    --accent-alt: var(--pnt-blue);
+    --accent-alt-hover: var(--pnt-blue-dim);
+
+    --accent-wash: rgb(242 76 2 / 0.08);
+    --accent-alt-wash: rgb(64 131 204 / 0.1);
+
+    color-scheme: light;
   }
 }
 
-html {
-  height: 100%;
+:root[data-theme='light'] {
+  --bg: #ffffff;
+  --surface: #f7f8f9;
+  --surface-raised: #ffffff;
+  --surface-sunken: #eef0f2;
+
+  --border: #e3e6ea;
+  --border-strong: #c6cbd2;
+
+  --heading: #0d0e10;
+  --text: #2b2f36;
+  --text-muted: #5c636d;
+  --text-faint: #868d97;
+
+  --accent: var(--pnt-orange);
+  --accent-hover: var(--pnt-orange-dim);
+  --accent-alt: var(--pnt-blue);
+  --accent-alt-hover: var(--pnt-blue-dim);
+
+  --accent-wash: rgb(242 76 2 / 0.08);
+  --accent-alt-wash: rgb(64 131 204 / 0.1);
+
+  color-scheme: light;
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+/* ---------------------------------------------------------------------------
+   Reset
 
-body {
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+   This replaces Tailwind's Preflight, which the prototype relied on for far
+   more than it looks like. Dropping Preflight without an equivalent changes
+   every heading, list, and button on the site at once — so it is written here
+   BEFORE any component is converted, not after (NEXTJS_MIGRATION.md §3.2).
+
+   Each rule below corresponds to something Preflight was doing. Do not prune
+   one because "nothing seems to use it" — the utilities that depended on these
+   rules are gone, but the markup that assumed them is not.
+--------------------------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  /* Preflight zeroes borders and sets a default style so a bare `border-width`
+     paints. Module CSS writes the shorthand, but UA borders on fieldset and
+     button would otherwise reappear. */
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--border);
 }
 
 * {
-  box-sizing: border-box;
-  padding: 0;
   margin: 0;
+  padding: 0;
+}
+
+html {
+  -moz-text-size-adjust: none;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-block-size: 100vh;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Preflight collapses headings to inherit, so every heading size on the site
+   is set explicitly by the component that renders it. Keeping that is what
+   stops UA styles from leaking back in mid-conversion. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  color: var(--heading);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+/* Replaced elements: block-level and never wider than their container. */
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  max-inline-size: 100%;
+}
+
+img,
+video {
+  block-size: auto;
+}
+
+button,
+input,
+select,
+optgroup,
+textarea {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  letter-spacing: inherit;
+}
+
+button,
+[role='button'] {
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  cursor: not-allowed;
+}
+
+textarea {
+  resize: vertical;
 }
 
 a {
   color: inherit;
-  text-decoration: none;
+  text-decoration: inherit;
 }
 
-@media (prefers-color-scheme: dark) {
+table {
+  border-collapse: collapse;
+  border-color: inherit;
+}
+
+hr {
+  block-size: 0;
+  color: inherit;
+  border-block-start-width: 1px;
+}
+
+/* Keyboard focus stays visible everywhere; the brief asks for semantic HTML
+   and this is the one accessibility affordance that costs nothing. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-wash);
+  color: var(--heading);
+}
+
+/* ---------------------------------------------------------------------------
+   Custom link cursors
+
+   Per the brief: hovering a link swaps the cursor to a redirect glyph —
+   PNT orange for destinations inside this site, PNT blue for external ones.
+
+   Scope decision (confirmed with PNT): these apply to CONTENT links and to
+   buttons outside the site chrome. The navbar, footer, and Contact popup keep
+   the normal pointer.
+
+   Caveats worth knowing: custom cursors need explicit pixel dimensions in the
+   SVG, cap out around 32x32 in most browsers, require a fallback keyword, and
+   simply do not exist on touch devices — so they must stay decorative.
+
+   Global rather than a module: components reference these by plain string,
+   exactly as in the prototype, and the cursor URLs resolve against /public.
+--------------------------------------------------------------------------- */
+.cursor-internal {
+  cursor: url('/cursors/link-internal.svg') 8 8, pointer;
+}
+
+.cursor-external {
+  cursor: url('/cursors/link-external.svg') 8 8, pointer;
+}
+
+/* Content link treatment: accent colored, underline appears on hover.
+   Pairs with the cursor classes above. */
+.link-internal {
+  color: var(--accent);
+  text-decoration: none;
+  cursor: url('/cursors/link-internal.svg') 8 8, pointer;
+  transition: color 150ms ease;
+}
+
+.link-internal:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link-external {
+  color: var(--accent-alt);
+  text-decoration: none;
+  cursor: url('/cursors/link-external.svg') 8 8, pointer;
+  transition: color 150ms ease;
+}
+
+.link-external:hover {
+  color: var(--accent-alt-hover);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------------------------------------------------------------------------
+   Scraper-protected email
+
+   Fragments are authored in REVERSED DOM order and flipped back visually here,
+   so the address is never contiguous in the DOM or in view-source. The
+   separators are pseudo-element content rather than text nodes, and selection
+   is disabled outright. See ProtectedEmail.tsx for the accepted tradeoffs.
+
+   Global rather than a module because the separator classes are matched as
+   descendants, and because the whole construction is a documented, verified
+   behavior on the "must not regress" list.
+--------------------------------------------------------------------------- */
+.protected-email {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  align-items: baseline;
+  white-space: pre;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.protected-email .sep-at::before {
+  content: ' [at] ';
+}
+
+.protected-email .sep-dot::before {
+  content: ' [dot] ';
+}
+
+/* ---------------------------------------------------------------------------
+   Article: full-width variant
+
+   Terms uses "enhanced article formatting" with only the left column. Scoping
+   the override to a parent class means nested <ArticleSection>s inherit it
+   without threading a prop or a context through.
+
+   These three class names are the one place module scoping is deliberately
+   given up: the variant is set on an ancestor and read by descendants that do
+   not import the ancestor's module. Article.tsx applies them through
+   `:global()` so the names survive compilation.
+--------------------------------------------------------------------------- */
+.article--full .article-rail {
+  display: none;
+}
+
+@media (--lg) {
+  .article--full .article-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Leaflet
+
+   Leaflet ships its own light-themed popup, attribution, and zoom chrome,
+   which reads as a white box dropped onto a dark page. These overrides pull it
+   onto the site's tokens. Scoped to Leaflet's own class names, so they apply
+   wherever a map is used.
+
+   ⚠️ Every selector here is deliberately doubled up (.leaflet-container prefix,
+   or the class repeated) to outrank Leaflet's own rules on SPECIFICITY rather
+   than on source order. Leaflet's stylesheet is imported from a lazily-loaded
+   client chunk, so it lands in the document AFTER this file and would
+   otherwise win every tie. Do not "simplify" these selectors.
+--------------------------------------------------------------------------- */
+.leaflet-container.leaflet-container {
+  font: inherit;
+  background: var(--surface-sunken);
+
+  /* Leaflet positions its panes at z-index 400 and its controls at 1000. It
+     sets `position: relative` but no z-index, so those values compete in the
+     ROOT stacking context — which means a map paints over any overlay with a
+     smaller z-index, including the portaled profile modal.
+
+     Adding a z-index here turns the map into its own stacking context, so 400
+     and 1000 only mean anything relative to other Leaflet layers. The map as a
+     whole then sits at 0, and any positioned element above it wins normally. */
+  z-index: 0;
+}
+
+.leaflet-container .leaflet-popup-content-wrapper,
+.leaflet-container .leaflet-popup-tip {
+  background: var(--surface-raised);
+  color: var(--text);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
+}
+
+.leaflet-container .leaflet-popup-content-wrapper {
+  border-radius: var(--radius-md);
+}
+
+.leaflet-container .leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+.leaflet-container a.leaflet-popup-close-button {
+  color: var(--text-faint);
+  padding: 6px 6px 0 0;
+}
+
+.leaflet-container a.leaflet-popup-close-button:hover {
+  color: var(--heading);
+  background: transparent;
+}
+
+.leaflet-container .leaflet-control-attribution {
+  /* Follows the page ground rather than a fixed dark, so it stays readable in
+     light mode too. */
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  color: var(--text-faint);
+  font-size: 10px;
+}
+
+.leaflet-container .leaflet-control-attribution a {
+  color: var(--accent-alt);
+}
+
+.leaflet-container .leaflet-bar a,
+.leaflet-container .leaflet-bar a:hover {
+  background: var(--surface-raised);
+  color: var(--text);
+  border-bottom-color: var(--border);
+}
+
+.leaflet-container .leaflet-bar a:hover {
+  color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Keyframes
+
+   Global because module-scoped @keyframes names are rewritten per file, and
+   these three are shared across components.
+--------------------------------------------------------------------------- */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cta-rise {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Motion
+
+   The brief asks for "very simple animations peppered throughout". Anything
+   added later must respect this guard. Components that cannot express their
+   reduced-motion behavior in CSS (Reveal, CountUp) handle it in their state
+   initializers instead — see the "must not regress" list.
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
   html {
-    color-scheme: dark;
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

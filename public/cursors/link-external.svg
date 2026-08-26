@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- External-destination cursor: PNT blue redirect arrow.
+       Same glyph as the internal cursor so the only signal is color. -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 23 L23 9 M14 9 L23 9 L23 18" stroke="#0d0e10" stroke-width="5.5" opacity="0.85"/>
+    <path d="M9 23 L23 9 M14 9 L23 9 L23 18" stroke="#5c9de0" stroke-width="2.75"/>
+  </g>
+</svg>
