@@ -247,9 +247,19 @@ export const MEMBERSHIPS: readonly Membership[] = [
   { label: 'Placeholder Group 1', icon: 'users' },
 ]
 
-/** Editing lives wherever PNT manages member records, not here. */
+/**
+ * Editing lives wherever PNT manages member records, not here.
+ *
+ * "Nexus Tech" is fictional and stays that way until real auth lands in phase
+ * 7 — this record is what the stubbed `isLoggedIn` flag shows. The photo path
+ * therefore points at its own folder rather than borrowing a real person's
+ * portrait, which is what it did until the content phase: it pointed into
+ * `leadership/executive-committee/member-01/`, a numbered folder that no
+ * longer exists, so it 404'd AND, worse, would have put a real volunteer's
+ * face on a fabricated profile if that folder had survived.
+ */
 export const PROFILE: Profile = {
-  photo: '/media/leadership/executive-committee/member-01/portrait.png',
+  photo: '/media/dashboard/profile.png',
   name: 'Nexus Tech',
   roles: ['Executive Committee member', 'Project group lead', 'NT member'],
   grade: '11th grade',

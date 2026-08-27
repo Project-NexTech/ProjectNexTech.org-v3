@@ -24,15 +24,20 @@ export const metadata: Metadata = {
     'Who Project NexTech is, how the organization started, how we think STEM should be taught, and the partners who make our programs possible.',
 }
 
-const ABOUT_CAROUSEL = [
-  'A placeholder caption for the first photo in the About us carousel.',
-  'A placeholder caption for the second photo in the About us carousel.',
-  'A placeholder caption for the third photo in the About us carousel.',
-  'A placeholder caption for the fourth photo in the About us carousel.',
-  'A placeholder caption for the fifth photo in the About us carousel.',
-].map((caption, index) => ({
-  heading: 'Placeholder heading',
-  caption,
+/**
+ * The "About us" carousel.
+ *
+ * These are the eight photos the live site showed as its programs gallery, on
+ * its own About page — same page, same generic role, so they carry over
+ * one-to-one. Six are 4:3 natively; about-us-06 is square and about-us-08 is
+ * 16:9, both of which crop to fit.
+ *
+ * COUNT IS THE CONFIGURATION, and captions are deliberately absent — same
+ * reasoning as the home carousel in src/app/page.tsx.
+ */
+const ABOUT_CAROUSEL_COUNT = 8
+
+const ABOUT_CAROUSEL = Array.from({ length: ABOUT_CAROUSEL_COUNT }, (_, index) => ({
   src: `/media/about/about-us/about-us-${String(index + 1).padStart(2, '0')}.png`,
 }))
 
@@ -53,7 +58,13 @@ function PartnerCard({ partner }: { partner: Partner }) {
 
   return (
     <Card interactive className={s.card}>
-      <ImagePlaceholder src={partner.logo} ratio="1:1" className={s.logo} alt="" />
+      <ImagePlaceholder
+        src={partner.logo}
+        ratio="1:1"
+        fit="contain"
+        className={cx(s.logo, partner.ink === 'light' && s.inkChip)}
+        alt=""
+      />
 
       <div className={s.partnerBody}>
         <h3 className={s.partnerName}>

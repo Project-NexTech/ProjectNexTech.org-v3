@@ -51,7 +51,7 @@ there is no "remove Tailwind" step because there is nothing to remove.
 | 2 | Primitives → `.tsx` + CSS Modules (Card, Button, Tag, Icon, SectionHeader, PageHeader, Wordmark, ImagePlaceholder, BigNumber, CountUp, Reveal, Carousel, ProtectedEmail) | Complete |
 | 3 | Layout chrome (Navbar, Footer, NewsBar, ContactPopup, ThemeToggle) + `Article.tsx` | Complete |
 | 4 | Feature components + all 13 pages | Complete |
-| C | Real content pass — the 177 images and the real roster from `../ProjectNexTech.org-new/` | Not started |
+| C | Real content pass — the 177 images and the real roster from `../ProjectNexTech.org-new/` | Complete |
 
 Phases 5-8 of `NEXTJS_MIGRATION.md` (Postgres, the API repo, auth, VPS) are
 out of scope until the frontend is done.
@@ -134,6 +134,34 @@ with correct per-route titles · `/discord` returns 308 to `discord.gg/6yHhgpC`
 `.woff2` with zero `googleapis`/`gstatic` references in the HTML ·
 `@custom-media` resolved to literal pixel values in the built CSS ·
 `robots.txt`, cursors, favicon, `programs.csv`, and `/media/logo.png` all serve.
+
+## Running the site locally
+
+**Use `npm run dev` for dev testing.** That is the default for working on the
+site — Turbopack dev server, hot reload, no build step.
+
+```bash
+npm run dev            # dev testing — use this
+```
+
+**Use `npm run build` + `npm start` only when testing a final build** — the
+prerender output, the built CSS, production bundles, route counts, anything the
+dev server does not represent faithfully. Every phase gate recorded in this file
+was verified that way, which is why they all say "next build + next start".
+
+```bash
+npm run build          # required first
+npm start              # serves what npm run build produced
+```
+
+**Never run `npm start` without `npm run build` first.** It builds nothing — it
+serves whatever happens to be sitting in `.next`, which is either a stale build
+or nothing at all. The stale case is the dangerous one: the site comes up and
+looks fine while serving the previous code, so a change you just made appears
+not to have applied. The Phase C notes record the same failure arriving by a
+different route (`EADDRINUSE`).
+
+Both build commands need **Node 22** on `PATH` — see the next section.
 
 ## Toolchain: use Node 22 LTS, not Node 23
 
@@ -426,16 +454,28 @@ arrives without ever calling `setState` from an effect.
 
 ### Toolchain footnote
 
-`npm run build` still fails with the Node 23 `workStore` invariant even when
-Node 22 is first on `PATH` — the `next` shim resolves `node` through the nvm4w
-symlink, not through `PATH`. Building as
+`npm run build` is the right command, but on this machine it can still fail
+with the Node 23 `workStore` invariant even when Node 22 is first on `PATH` —
+the `next` shim resolves `node` through the nvm4w symlink rather than through
+`PATH`, so the npm script gets Node 23 anyway.
+
+The fix is to make Node 22 the shell's actual runtime, then use the npm script
+normally:
+
+```bash
+nvm use 22.13.1        # needs an elevated shell on nvm4w
+npm run build
+```
+
+Invoking the binary directly bypasses the shim, and is the escape hatch for
+when that is not possible — not the normal way to build:
 
 ```bash
 node ./node_modules/next/dist/bin/next build
 ```
 
-with a Node 22 `node` succeeds. Pinning the runtime (`.nvmrc`, Docker base
-image) before Phase 8 removes the whole trap.
+Pinning the runtime (`.nvmrc`, Docker base image) before Phase 8 removes the
+trap and makes `npm run build` simply correct.
 
 **Verified at the Phase 4 gate** (Node 22, `next build` + `next start`, driven
 in a real browser at 1440 / 1100 / 1023px, light and dark): `tsc` clean,
@@ -483,3 +523,306 @@ preloads plus Google's inside the My Maps iframe.
 - **Navbar two-stage collapse** — >=xl all inline; lg..xl primary inline with
   utilities folded; <lg logo, one theme toggle, and the hamburger only.
   Exactly one theme toggle visible at every width.
+
+## Phase C notes
+
+The 177 images in `../ProjectNexTech.org-new/public/img/` are accounted for:
+**171 copied**, 6 consciously skipped, 0 unaccounted for. The Leadership page
+holds the 20 real people. No fabricated person or organization is left on the
+site.
+
+### What the images map onto
+
+| Source | Destination | Count |
+|---|---|---|
+| `partners/*.png` | `about/partners/partner-*.png` | 7 |
+| `carousel_1-8.png` | `home/carousel/home-carousel-NN.png` | 8 |
+| `gallery_1-8.png` | `about/about-us/about-us-NN.png` | 8 |
+| `programs/X_Y_N.png` | `curriculum/<code>-<slug>/shot-NN.png` | 63 |
+| `team/*` | `leadership/<group>/<person>/` | 85 |
+
+Skipped on purpose: `Logo.png` (a 675x500 copy is already at
+`public/media/logo.png`), `404.png` (the not-found page is typographic),
+`discord.png` and `cursor.png` (this site draws both from its own assets),
+`team/nt_leader.png` (a generic stand-in portrait), and `team/src_4.jpg`
+(a duplicate of `src_4.png`).
+
+**Course photos map 1:1 by code and the mapping is written out in full**, not
+derived from titles. `2.1` and `2.2` were renamed by the brief from "Intro to
+FLL" / "Intro to FTC", so a title-derived rule would have missed them. `4.4`
+Intro to Astronomy is brief-invented and has no photos anywhere; its card shows
+three dashed boxes naming the files it wants.
+
+### Leadership media folders are named after the person
+
+The scaffolding used `member-01`, `member-02`, … Those folders were deleted.
+With a real roster, numbered folders are a trap: the first time someone joins
+or leaves mid-group, every folder below them refers to a different person and
+each photo silently belongs to the wrong face. Nothing errors.
+
+`slug` in `src/data/leadership.ts` is the single source of both the folder name
+and the image paths, so the two cannot drift.
+
+`shots` on each member is a real count of the carousel files that exist —
+several people have four rather than five, and the advisors' chair has a
+portrait only. Add a photo, bump the number.
+
+**`public/media/leadership/unlisted/` is referenced by nothing.** It holds five
+real photo sets with nowhere to go: Varshith Vijjapu and Colin Thompson have
+complete sets but appear nowhere on the live team page; Kush Kharia has a
+portrait only; J.P. Pierce and Jocelyn Slape are advisors, which render as
+name-only cards. Copied so the port lost no files. See that folder's README.
+
+### Real photographs did not get invented captions
+
+Every caption that shipped in Phase 4 was placeholder prose describing a
+hypothetical photo — "students building during a maker space workshop". Pinning
+those onto real photographs would state as fact something nobody recorded. So
+the home carousel, the About carousel, and all 85 team photos ship **without
+captions**; `Carousel` omits the caption block entirely when there is nothing
+to show. Captions are tracked in `LAUNCH_READINESS.md`.
+
+### Counts are configuration, not constants in component code
+
+- `CAROUSEL_COUNT` in `src/app/page.tsx` and `ABOUT_CAROUSEL_COUNT` in
+  `src/app/about/page.tsx` — drop in `home-carousel-09.png`, raise the number,
+  done. Nothing else changes.
+- `DEFAULT_COURSE_SHOTS` in `src/data/courses.ts` (3, which is what every
+  course on the live site actually had) with an optional per-course `shots`
+  override, read through `courseShots()`. `SHOTS_PER_CARD = 5` is gone from
+  `CourseCard.tsx`; a component no longer decides how many photos exist.
+
+A count higher than the files present is not an error — the extra frames render
+as dashed boxes naming the missing file, which is how a gap stays visible.
+
+### Links corrected
+
+- **`MYMAP.embedUrl`: `/maps/d/u/2/` -> `/maps/d/u/0/`.** The `/u/N/` segment
+  is a Google ACCOUNT SLOT, not part of the map id. At `/u/2/` the Impact map
+  resolves only for a viewer whose third signed-in Google account can see it
+  and renders a permission error for everyone else. This was live in Phases
+  1-4 and would have shipped.
+- **`DOCS.constitutionEmbed`** now uses the live site's PUBLISHED URL
+  (`/d/e/2PACX-…/pub?embedded=true`). The old `/preview` URL renders a sign-in
+  wall unless the document happens to be shared link-public. Note the published
+  id is a different string from the document id in `DOCS.constitution`; that is
+  expected, not a typo.
+- **`DONORBOX.campaignSlug = 'donate-to-project-nextech'`** plus `embedParams`
+  carrying the live site's defaults (monthly, $100, general designation). This
+  closes the LAUNCH_READINESS blocker — the site can accept donations. The
+  labelled-placeholder branch stays as the degradation path if the slug is ever
+  cleared.
+- **`FORMS.partnership`** added and embedded on Contribute. The
+  scraper-protected `ec@` address stays alongside it: the "must not regress"
+  list requires that `ProtectedEmail` is never the only route to an inbox.
+- **Discord invite stays `6yHhgpC`** (PNT confirmed). The live site's Join page
+  uses `ecJhHVd`; both work, and v3 uses its value in three places.
+- **`FORMS.enrollment2026`** is documented as the same form the live site
+  embeds on /join, so nobody wires up a second copy.
+
+### ImagePlaceholder gained a `fit` prop, and `contain` needs `.bare` with it
+
+`fit="contain"` for logos. The default `cover` crops to fill, which is right
+for a photograph and wrong for a logo: the Cyberius wordmark is 3:1 in a 1:1
+partner slot and rendered as the middle third of a word. Partner cards pass
+`contain`; nothing else does.
+
+**Switching the fit was only half the fix, and the other half was invisible in
+six cases out of seven.** `.frame` paints `--surface-sunken` behind the image —
+right for a photograph, where it reads as a frame waiting to be filled. A
+square logo covers that well completely, so it never showed. The moment one
+logo was not square, `contain` letterboxed it and the well showed through as
+bars above and below: a transparent white wordmark rendering as a **black box**
+sitting on the card. It looked like a broken asset, and the asset was fine.
+
+So `fit="contain"` now also selects `.bare` (`background: transparent`) instead
+of `.filled`. The two are a pair — do not set one without the other. Verified:
+7 frames carry `.bare`, the other 13 still carry `.filled`.
+
+This was caught by eye, not by any check. Every automated gate passed with the
+black box on the page: the file existed, served 200, decoded to 3277x1081, had
+a transparent top-left pixel, and measured mean ink luminance 233. Pixel
+statistics of the *asset* say nothing about the *frame* behind it.
+
+### White-ink logos get a chip, in light mode only
+
+The mirror image of that bug turned up the moment the page was viewed in LIGHT
+mode. Two partner assets are white marks on transparency — fine forever on a
+site that only had a dark theme, invisible on a light card. Measured as the
+share of each logo's ink with no usable contrast against the card it sits on:
+
+| Logo | on light | on dark |
+|---|---|---|
+| Cyberius | **72%** | 0% |
+| Francis Parker School | **70%** | 0% |
+| International Research Olympiad | 55% | 37% |
+| GSDSEF / City of SD / Google / Qualcomm | <=26% | 0% |
+
+`Partner.ink = 'light'` in `src/data/partners.ts` flags such a file, and the
+About page gives it a dark chip to sit on **in light mode only**. This is a
+property of the FILE, not the brand — replace the asset with a dark or
+full-color variant and delete the flag.
+
+The chip needs all three theme blocks, which is the convention `globals.css`
+already sets: bare `:root` is light, and dark is the override. Both dark
+selectors are required — the media query catches "system" (no `data-theme`
+attribute at all) and the attribute selector catches an explicit toggle. All
+three are verified in the built CSS.
+
+**Painting a background exposed a second latent bug.** `.logo` is a flex child
+of the partner card, so with no `align-self` it stretched to the full card
+height. That was invisible while it had no background — the 1:1 frame inside
+sat at the top regardless — and became a tall dark column the instant the chip
+painted one. `align-self: flex-start` fixes it, and is correct with or without
+the chip.
+
+### Two traps that cost time while verifying this
+
+**1. `ImagePlaceholder`'s `className` lands on an OUTER WRAPPER, not the
+frame.** The tree is `div.<className>` > `div.frame` > `img`. Measuring
+`img.parentElement` reads the frame and misses everything the caller styled;
+the wrapper is `img.parentElement.parentElement`.
+
+**2. `npm start` fails SILENTLY into a stale server.** Starting it in the
+background while an older instance still holds the port makes the new process
+exit with `EADDRINUSE` — and the old one keeps answering on that port, serving
+the PREVIOUS build. Every subsequent measurement is then taken against stale
+output, and it looks exactly like a CSS change that did not apply. Confirmed by
+finding `align-self` present in the built CSS on disk while the served HTML did
+not even reference the chunk containing it.
+
+Always free the port before starting, and never with a blunt `taskkill /IM
+node.exe` — that also kills the Playwright MCP server and drops the browser
+session mid-pass:
+
+```bash
+for PID in $(netstat -ano | grep ":3100" | grep LISTENING | awk '{print $5}' | sort -u); do
+  taskkill //F //PID "$PID"
+done
+# then start, and check the log actually came up
+grep -q EADDRINUSE "$LOG" && echo "STILL IN USE"
+```
+
+### The Donorbox frame sizes itself; the fallback height is not decoration
+
+Donorbox's documented embed is a FIXED-height iframe (their snippet says 900px)
+plus `https://donorbox.org/widget.js`, which listens for a height the form posts
+out and resizes the frame. Phase C shipped the iframe without the resizer, so
+the panel stood at 900px around a ~745px form and the bordered box had an empty
+band at the bottom. It was wrong on the other axis too: `form.donation-form`
+inside the frame is `width: 100%` capped at **423px** and LEFT-ALIGNED, so a
+542px column left 117px of dead space down the right, inside the border.
+
+`src/components/contribute/DonorboxFrame.tsx` is that resizer, written against
+the same postMessage protocol rather than by loading their script:
+
+- `widget.js` guards on a global (`window.DBOX_EMBEDED`) and does its work once,
+  on DOMContentLoaded. A second visit here is a client navigation with no new
+  document, so it short-circuits and the fresh iframe is never wired up. The
+  live site has this bug. An effect keyed to the element's lifetime cannot.
+- It rewrites `iframe.src` (appending `a=b`) to force `allowpaymentrequest` on,
+  reloading the payment form a second time. Ours ships `allow="payment"` in the
+  markup and loads once.
+- Nothing on this site loads a remote script it does not have to, and the part
+  of that script we need is about twenty lines.
+
+Protocol: stamp the frame with `data-donorbox-id`, post
+`{ action: 'set-iframe-id', msg: <id> }` into it, then accept `{ from: 'dbox',
+height }` messages from `https://donorbox.org` and write `height + 3` px. The
+`name="donorbox"` attribute is load-bearing — the form does not answer without
+it.
+
+**Two things here look like tidying and are not:**
+
+1. **The 900px in the CSS is the no-JS fallback**, not a starting guess, so it
+   has to stay tall enough for the whole form rather than merely typical.
+   Lowering it to "about right" clips the form for anyone the messages never
+   reach.
+2. **`scrolling="no"` is deliberately absent** even though Donorbox's snippet
+   sets it. Once the height tracks the content there is nothing to scroll, and
+   the one case that would produce a scrollbar is the one where the resize did
+   not happen and the donor still needs to reach the Next button.
+
+`max-width: 425px` is the form's 423px cap plus the document's 2px inset.
+Undershooting is safe — the form is fluid below its cap and simply narrows,
+which is what carries the mobile layout — so if Donorbox ever widens the form
+this stays conservative rather than clipping.
+
+**Verified** (Node 22, `next build` + `next start`, real browser): frame 425x744
+around a 421x742 form — 4px of dead width, 2px of dead height, down from 117px
+and 156px. The height is genuinely reactive, not a one-shot: 744 -> 688 when
+"One-time" is picked, -> 774 when the comment box opens. After a client-side nav
+to /about and back (`performance.getEntriesByType('navigation').length === 1`,
+so no reload) it still measures 744px, which is the case `widget.js` gets wrong.
+No inner scrollbar; identical in light and dark; fluid to 342px at a 390px
+viewport.
+
+### Deliberately still placeholder
+
+- **Project Groups** — all 20 groups, their codes, leads, members, and
+  coordinates are invented, and no real data for them exists in either source
+  repo. 20 dashed `region.png` boxes.
+- **About History (5), Impact (6), Volunteer (9)** — 20 article figures. PNT
+  chose to leave these showing their file paths rather than fill them with
+  generic gallery photos that the captions would then misdescribe.
+- **`shared/og`** — the 1200x630 social preview image.
+- **Dashboard `PROFILE`** — tied to the stubbed `isLoggedIn` flag, so it stays
+  fictional until real auth lands in Phase 7.
+
+### Verified at the Phase C gate
+
+Node 22, `next build` + `next start`. `tsc` clean · `eslint` clean · 13/13
+routes prerendered · 0 unresolved media queries.
+
+- **Every image reference resolves or is a known placeholder.** 93 unique
+  `/media/` paths in the served HTML: 52 serve 200, and all 41 that 404 are the
+  deliberate placeholders above (history 5, impact 6, volunteer 9, project
+  groups 20, og 1). Widening the audit to client-only surfaces — every file in
+  the leadership tree, every course shot path — gives 244 paths checked with
+  **no unexpected 404 and no accidental orphan**; the only unreferenced files
+  on disk are the 14 in `unlisted/`, which is the point of that folder.
+- **Roster**: all 20 real names present, 0 occurrences of "Placeholder Name",
+  13 portrait paths (12 members + the advisors chair).
+- **Partners**: 7 cards, 0 occurrences of "Placeholder Partner".
+- **Partner logos are safe in both themes** — decoded each PNG's pixels
+  directly: all 7 have a transparent top-left (alpha 0, so no white box on the
+  dark surface) and mean ink luminance 86-233 against a `--surface-raised` of
+  ~30, so none disappears in dark mode.
+- **Links**: Donorbox slug and params present and the placeholder branch gone;
+  partnership form embedded; Constitution serving the published URL; MyMap at
+  `/u/0/` with no `/u/2/` anywhere.
+
+**Browser pass** (Playwright, 1440px, dark theme — it reconnected after the
+checks above):
+
+- **Leadership**: 13 portraits, **0 broken**, 0 placeholder boxes, all 12 real
+  card names. Matthew Hsu's popup renders the real portrait carousel (5 slides,
+  0 broken), both real bio paragraphs, and all 9 detail rows including the new
+  Extracurriculars and Interests. No caption block, as intended.
+- **About**: 15 images, 0 broken. 7 partner cards, all `object-fit: contain`.
+  The 5 History figures show their file paths, which is the agreed placeholder
+  behavior.
+- **Curriculum**: real photos, 3 shots per card, no `shot-04/05` requested
+  anywhere; 4.4 Astronomy shows exactly 3 dashed boxes naming its missing files.
+- **Contribute**: Donorbox live with Monthly and USD 100 preselected and the
+  designation applied; the real Partnership Request Form renders beside it; the
+  protected `ec@` address is still present. All console errors on that page
+  originate inside the third-party iframes.
+- **Policies**: the published Constitution renders in full, no sign-in wall.
+- **Impact**: the My Maps embed loads real pins across four continents in a
+  browser signed into no Google account — which is the proof that `/u/2/` was
+  broken and `/u/0/` is not.
+- **Dashboard**: signed in, the fictional profile shows its own dashed box and
+  no longer borrows a real volunteer's portrait. 3 chart surfaces render.
+- **Article rail with real photos**: About section 1's `minHeight` re-measured
+  from 331px to 258px once the real 4:3 image replaced the fixed-ratio dashed
+  box, still with zero overlaps. The ResizeObserver handles the post-paint
+  geometry change, which had never been exercised with real images before.
+- **The black-box bug above was found here and nowhere else**, and the
+  white-ink-on-light bug was found in the same pass. Both fixed and re-verified
+  in the browser in all three theme states.
+
+Lazy loading is worth knowing about when measuring in a browser:
+`ImagePlaceholder` sets `loading="lazy"`, so a below-the-fold image reports
+`complete: false` and `naturalWidth: 0` — indistinguishable from broken unless
+you scroll it into view first. Partner logos sit at the bottom of a long page.

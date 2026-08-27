@@ -1,0 +1,25 @@
+/* The two dimensions are fixed by different mechanisms, and both were wrong.
+ *
+ * HEIGHT: 900px is Donorbox's own documented default and the height the frame
+ * keeps if the resize message never arrives, so it has to be tall enough for
+ * the whole form rather than merely typical. The real form is ~750px, which is
+ * where the empty band at the bottom came from. DonorboxFrame replaces this
+ * with the height the form reports as soon as it reports one.
+ *
+ * WIDTH: `form.donation-form` inside the iframe is `width: 100%` capped at
+ * 423px and LEFT-ALIGNED, so every pixel of a wider frame became dead space
+ * down the right-hand side — bordered, so it read as part of the panel. 425px
+ * is that cap plus the document's 2px inset. Undershooting is safe (the form
+ * is fluid below its cap and simply narrows); overshooting is what leaves the
+ * gap, so if Donorbox ever widens the form this stays merely conservative
+ * rather than clipping it. Below 425px the frame is fluid, which is what
+ * carries the mobile layout. */
+.embed {
+  height: 900px;
+  width: 100%;
+  max-width: 425px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  display: block;
+}

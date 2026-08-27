@@ -28,6 +28,17 @@
  *    exercise the design and are expected to be reassigned by PNT.
  */
 
+/**
+ * Card-carousel photos per course, unless a course overrides it with `shots`.
+ *
+ * Every course on the live site shipped exactly three photos, so three is the
+ * default rather than a target. Raise this when the whole catalog gains a
+ * fourth; override one course with `shots` when only that one does. A count
+ * higher than the files present is not an error — the extra frames render as
+ * dashed boxes naming the missing file, which is how a gap stays visible.
+ */
+export const DEFAULT_COURSE_SHOTS = 3
+
 export const COURSE_TAGS = {
   NEW: 'NEW',
   POPULAR: 'MOST POPULAR',
@@ -59,6 +70,12 @@ export interface Course {
   gradeIdeal: GradeRangeTuple
   materials: readonly MaterialSpec[]
   tags: readonly CourseTag[]
+  /**
+   * How many card-carousel photos this course has, when it differs from
+   * DEFAULT_COURSE_SHOTS. Set it to the number of shot-NN.png files actually
+   * sitting in the course's media folder — drop another photo in, bump this.
+   */
+  shots?: number
   /**
    * Provenance note for a value that was INFERRED rather than sourced from the
    * live site. Not rendered anywhere — it exists so the next editor knows
@@ -365,6 +382,11 @@ export function courseMediaDir(course: Pick<Course, 'title' | 'code'>): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
   return `/media/curriculum/${course.code}-${slug}`
+}
+
+/** Photos in a course's card carousel. */
+export function courseShots(course: Pick<Course, 'shots'>): number {
+  return course.shots ?? DEFAULT_COURSE_SHOTS
 }
 
 /** Look up a course by its code, e.g. getCourse('3.1'). */

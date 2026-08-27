@@ -38,6 +38,13 @@ export interface ImagePlaceholderProps {
   src?: string
   alt?: string
   ratio?: ImageRatio
+  /**
+   * `cover` (the default) fills the frame and crops — right for photographs.
+   * `contain` fits the whole image inside it — the only correct choice for a
+   * LOGO, whose shape is not ours to crop. The Cyberius wordmark is 3:1 in a
+   * 1:1 partner slot; under `cover` it renders as the middle third of a word.
+   */
+  fit?: 'cover' | 'contain'
   className?: string
   imgClassName?: string
 }
@@ -55,6 +62,7 @@ export default function ImagePlaceholder({
   src,
   alt = '',
   ratio = '4:3',
+  fit = 'cover',
   className = '',
   imgClassName = '',
 }: ImagePlaceholderProps) {
@@ -90,7 +98,7 @@ export default function ImagePlaceholder({
           <span className={s.ratioLabel}>{ratio}</span>
         </div>
       ) : (
-        <div className={cx(frame, s.filled)}>
+        <div className={cx(frame, fit === 'contain' ? s.bare : s.filled)}>
           {/* eslint-disable-next-line @next/next/no-img-element --
               Deliberate: this component's contract is "render the file if it
               exists, otherwise show its path", and next/image cannot express
@@ -102,7 +110,7 @@ export default function ImagePlaceholder({
             alt={alt}
             loading="lazy"
             onError={() => setFailed(true)}
-            className={cx(s.img, imgClassName)}
+            className={cx(s.img, fit === 'contain' && s.contain, imgClassName)}
           />
         </div>
       )}

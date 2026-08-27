@@ -73,14 +73,6 @@
   margin-top: 1.5rem;
 }
 
-.embed {
-  height: 900px;
-  width: 100%;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--surface);
-}
-
 /* The labelled stand-in shown until DONORBOX.campaignSlug is set. Dashed
    border so it reads as scaffolding rather than as a finished panel. */
 .placeholder {
@@ -116,4 +108,15 @@
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--text);
+}
+
+/* Google Forms sets its own white ground and cannot be themed from out here,
+   so it is framed like a document rather than blended into the page. */
+.form {
+  margin-top: 1.5rem;
+  height: 800px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fff;
 }

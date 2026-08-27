@@ -3,15 +3,15 @@ import Card from '@/components/ui/Card'
 import Carousel from '@/components/ui/Carousel'
 import Icon from '@/components/ui/Icon'
 import Tag from '@/components/ui/Tag'
-import { courseMediaDir, normalizeMaterial, type Course } from '@/data/courses'
+import { courseMediaDir, courseShots, normalizeMaterial, type Course } from '@/data/courses'
 import { MATERIAL_ICONS } from '@/constants'
 import s from './CourseCard.module.css'
 
-const SHOTS_PER_CARD = 5
-
+/* The count comes from the course, not from a constant here — see
+   DEFAULT_COURSE_SHOTS in src/data/courses.ts. */
 function carouselItems(course: Course) {
   const dir = courseMediaDir(course)
-  return Array.from({ length: SHOTS_PER_CARD }, (_, index) => ({
+  return Array.from({ length: courseShots(course) }, (_, index) => ({
     src: `${dir}/shot-${String(index + 1).padStart(2, '0')}.png`,
     alt: '',
   }))

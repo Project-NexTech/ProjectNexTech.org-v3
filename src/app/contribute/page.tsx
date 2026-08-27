@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 
+import DonorboxFrame from '@/components/contribute/DonorboxFrame'
 import PageHeader from '@/components/ui/PageHeader'
 import ProtectedEmail from '@/components/ui/ProtectedEmail'
 import Wordmark from '@/components/ui/Wordmark'
 import { cx } from '@/lib/cx'
-import { DONORBOX, EMAILS } from '@/constants'
+import { DONORBOX, EMAILS, FORMS } from '@/constants'
 import s from './page.module.css'
 
 export const metadata: Metadata = {
@@ -77,10 +78,17 @@ function Bullet({ tone, label, children }: { tone: Tone; label?: string; childre
 }
 
 /**
- * OPEN ITEM (LAUNCH_READINESS.md): the live site exposes no Donorbox campaign
- * slug, so PNT has to supply it from the Donorbox dashboard. Until then this
- * renders a labelled stand-in rather than an empty column — the page has to
- * look deliberate while it waits.
+ * The live campaign, opening monthly at $100 with a general designation —
+ * `embedParams` in constants carries those defaults verbatim from the live
+ * site so both sites collect against the same campaign the same way.
+ *
+ * The placeholder branch is kept, not dead code: clearing `campaignSlug`
+ * (a campaign ending, a dashboard change) has to degrade to a labelled box
+ * rather than to an iframe pointed at nothing.
+ *
+ * The live branch is a Client Component only because the frame has to be sized
+ * to its own content — see `DonorboxFrame`. Everything else on this page,
+ * including this decision, stays on the server.
  */
 function DonorboxEmbed() {
   if (!DONORBOX.campaignSlug) {
@@ -97,12 +105,8 @@ function DonorboxEmbed() {
   }
 
   return (
-    <iframe
-      src={`${DONORBOX.embedBase}${DONORBOX.campaignSlug}`}
-      title="Donate to Project NexTech"
-      name="donorbox"
-      allow="payment"
-      className={s.embed}
+    <DonorboxFrame
+      src={`${DONORBOX.embedBase}${DONORBOX.campaignSlug}?${DONORBOX.embedParams}`}
     />
   )
 }
@@ -130,11 +134,21 @@ export default function ContributePage() {
           </ul>
 
           <p className={s.note}>
-            If any of these sound like a fit, email us and we can work out the details together.
+            If any of these sound like a fit, fill in the Partnership Form below and we will get
+            back to you. You can also email us directly and we can work out the details together.
           </p>
           <p className={s.email}>
             <ProtectedEmail email={EMAILS.ec} />
           </p>
+
+          {/* The form is an addition, not a replacement: the "must not regress"
+              list requires that the scraper-protected address is never the only
+              route to an inbox. */}
+          <iframe
+            src={`${FORMS.partnership}?embedded=true`}
+            title="Partnership Form"
+            className={s.form}
+          />
         </section>
 
         <section>

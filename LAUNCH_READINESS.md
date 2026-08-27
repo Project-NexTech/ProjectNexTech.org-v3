@@ -115,6 +115,13 @@ mode, and keyboard-testing the Programs map.
 
 ## Home
 
+### 🟡 Home and About carousels have photos but no captions
+The 8 home-page photos and the 8 About-page photos are real, carried over from
+the live site, and are 16:9 and 4:3 respectively. None has a caption, for the
+same reason as the team photos: nobody recorded what each one depicts. Each
+carousel's length is driven by one `*_COUNT` constant at the top of its page
+file — add a file, raise the number.
+
 ### 🟡 Carousel images and captions
 12 slots at `public/media/home/carousel/` (16:9). Captions are in
 `src/pages/Home.jsx`.
@@ -158,7 +165,14 @@ carousel expects **long captions (30+ words)** — these are meant to be direct
 quotes from named volunteers, so they need collecting.
 
 ### ✅ Google MyMap
-Already embedded and working with real program pins.
+Embedded and working with real program pins.
+
+The URL was corrected in the content phase from `/maps/d/u/2/embed` to
+`/maps/d/u/0/embed`. The `/u/N/` segment is a Google **account slot**, not part
+of the map id — at `/u/2/` the iframe resolves only for a viewer whose third
+signed-in Google account can see the map, and renders a permission error for
+everyone else. Whatever My Maps hands you when you copy an embed URL, keep this
+at 0.
 
 ---
 
@@ -244,20 +258,32 @@ titles — **renaming a course means renaming its folder** under
 
 ## Leadership
 
-### 🔴 The entire roster is placeholder
-`src/data/leadership.js` contains 27 fabricated people named "Placeholder Name
-1" through "Placeholder Name 27". Names were kept obviously fake **on purpose**,
-so nothing could be mistaken for a real volunteer.
+### ✅ The roster is real
+Done in the content phase. `src/data/leadership.ts` now holds the 20 real
+people from the live site — Executive Committee (5), Department Managers (3),
+Board of Directors (4), and the Board of Advisors chair plus 7 members — with
+their real roles, bios, join dates, grades, schools, regions, and LinkedIn
+URLs. 85 real photographs are in place. No fabricated person remains.
 
-Each entry needs: name, role(s), portrait, up to 5 carousel photos with
-captions, a 3-paragraph bio, join date, grade, school, region, and an optional
-LinkedIn URL.
+Media folders are named after the person (`matthew-hsu/`), not numbered.
+Numbered folders silently reassign photos to the wrong faces the first time
+someone joins or leaves mid-group.
 
-This page is hand-maintained by design — there is no database to wire up.
+This page stays hand-maintained by design — there is no database to wire up.
 
-### 🟡 Secondary roles are invented
-Some members carry extra roles ("Curriculum Reviewer", "Founding Member") purely
-to exercise the multi-role popup layout.
+### 🟡 Team photos have no captions
+The 85 member photos carry no captions, because the live site never recorded
+what any of them shows and inventing one would be a guess presented as fact.
+Carousel omits the caption block entirely when there is nothing to show, so
+they read clean. Add a `caption` in `src/data/leadership.ts` when PNT can say
+what each photo is.
+
+### 🟡 Five photo sets are parked, not shown
+`public/media/leadership/unlisted/` holds real photos with nowhere to go:
+Varshith Vijjapu and Colin Thompson (complete sets, but absent from the live
+team page), Kush Kharia (portrait only), and J.P. Pierce and Jocelyn Slape
+(advisors, who render as name-only cards). See that folder's README to wire one
+up.
 
 ---
 
@@ -295,15 +321,30 @@ frame exactly.
 
 ## Contribute
 
-### 🔵 Donorbox is not connected
-`DONORBOX.campaignSlug` in `src/constants/index.js` is `null`, so the page
-renders a labelled placeholder instead of the donation form.
+### ✅ Donorbox is connected
+`DONORBOX.campaignSlug` is `donate-to-project-nextech`, taken from the live
+site's own embed along with its query string — monthly interval, $100 default,
+general designation. The site can accept donations.
 
-**Fix:** Donorbox dashboard → Campaign → Embed, copy the campaign slug, set the
-constant. The real iframe appears immediately; no other change needed.
+The labelled-placeholder branch is deliberately still in the page: if the slug
+is ever cleared, Contribute degrades to a labelled box rather than to an iframe
+pointed at nothing.
 
-Until this is done **the site cannot accept donations**, which makes it a
-launch blocker in practice even though nothing is broken.
+### ✅ Partnership form
+The live site's Partnership Form is embedded on Contribute beneath the partner
+tiers. The scraper-protected `ec@` address stays alongside it — the form is an
+addition, never the only route to an inbox.
+
+### 🟡 Two partner logos are white-ink only
+`partner-cyberius.png` and `partner-francis-parker-school.png` are white marks
+on transparency, carried over from a site that only had a dark theme. 72% and
+70% of their ink respectively has no usable contrast against this site's light
+card.
+
+They are flagged `ink: 'light'` in `src/data/partners.ts`, which gives them a
+dark chip to sit on in light mode — legible today, and no brand colors were
+altered. **The real fix is the right asset:** ask Cyberius and Francis Parker
+for a dark-ink or full-color variant, drop it in, and delete the flag.
 
 ### 🟡 Partnership and donation copy
 Placeholder bullets. The tier descriptions should match whatever PNT actually
@@ -392,13 +433,14 @@ independent of the rebuild and can run in parallel with it — **it should**,
 since it is the long pole and needs no engineering.
 
 1. **Terms** — legal review (long lead time, start first)
-2. **Donorbox slug** — one line, unblocks donations
+2. ~~**Donorbox slug**~~ — done in the content phase
 3. **The rebuild** — `NEXTJS_MIGRATION.md` phases 0–4: VPS provisioned, Next 16
    scaffold deployed over HTTPS, then the port off Vite/Tailwind
 4. **Venue geocoding** — correctness issue on the flagship feature; do it as
    part of seeding the `venues` table rather than editing `venueCoordinates.js`
 5. **Partner tiers + courses 2.1/2.2** — small, and currently wrong
-6. **Real rosters** — Leadership and Project Groups (stay hand-maintained)
+6. **Real rosters** — Leadership is done; Project Groups is still entirely
+   placeholder and stays hand-maintained
 7. **Photography** — the largest volume of work; parallelizable
 8. **Real program data** — `NEXTJS_MIGRATION.md` phases 5–6, Sheets → Postgres
 9. **Google sign-in and the hours backend** — phase 7; can follow launch, since

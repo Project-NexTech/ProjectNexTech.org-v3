@@ -15,25 +15,23 @@ export const metadata: Metadata = {
 }
 
 /**
- * Captions live here rather than in filenames so they can be edited without
- * renaming media. Drop files into public/media/home/carousel/ to fill these.
+ * The hero carousel.
+ *
+ * COUNT IS THE CONFIGURATION. There are eight photos in
+ * public/media/home/carousel/ today, all 16:9, carried over from the live
+ * site. Drop `home-carousel-09.png` into that folder, change this 8 to a 9,
+ * and it appears — no other edit anywhere.
+ *
+ * NO CAPTIONS, deliberately. These are real photographs of real programs and
+ * nobody has recorded what each one shows; a written-in caption would be a
+ * guess presented as fact. Carousel omits the caption block entirely when
+ * there is nothing to show, so the frames read clean until PNT supplies real
+ * ones (tracked in LAUNCH_READINESS.md). Add them as a `caption` here.
  */
-const CAROUSEL = [
-  'A placeholder caption for a photo from one of our library programs.',
-  'A placeholder caption showing students building during a maker space workshop.',
-  'A placeholder caption from a robotics mentoring session.',
-  'A placeholder caption showing volunteers preparing materials before a class.',
-  'A placeholder caption from a programming course in progress.',
-  'A placeholder caption showing a student presenting a science fair project.',
-  'A placeholder caption from a physics demonstration.',
-  'A placeholder caption showing an international program run online.',
-  'A placeholder caption from a natural sciences experiment.',
-  'A placeholder caption showing our volunteers at a community event.',
-  'A placeholder caption from a partner-hosted program.',
-  'A placeholder caption showing students at the end of a course.',
-].map((caption, index) => ({
+const CAROUSEL_COUNT = 8
+
+const CAROUSEL = Array.from({ length: CAROUSEL_COUNT }, (_, index) => ({
   src: `/media/home/carousel/home-carousel-${String(index + 1).padStart(2, '0')}.png`,
-  caption,
 }))
 
 const HOME_NUMBERS = BIG_NUMBERS.filter((number) => number.onHome)

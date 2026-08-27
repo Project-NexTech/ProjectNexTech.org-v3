@@ -71,3 +71,24 @@
   inline-size: 100%;
   object-fit: cover;
 }
+
+/* Logos only. A logo's aspect ratio belongs to its owner, so it is fitted
+   inside the frame rather than cropped to fill it. */
+.contain {
+  object-fit: contain;
+}
+
+/* The companion to .contain, and not optional alongside it.
+ *
+ * .filled paints a sunken well behind the image, which is right for a
+ * photograph — it reads as a frame waiting to be filled. Behind a LOGO it is
+ * wrong, and invisibly so while every logo happens to be square: a square logo
+ * covers the well completely. The moment one is not — the Cyberius wordmark is
+ * 3:1 in a 1:1 slot — `contain` letterboxes it and the well shows through as a
+ * black bar above and below, turning a transparent white wordmark into what
+ * looks like a black box sitting on the card.
+ *
+ * So a contained image sits directly on whatever is behind it. */
+.bare {
+  background: transparent;
+}

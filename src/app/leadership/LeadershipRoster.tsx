@@ -37,6 +37,11 @@ function memberDetails(member: LeadershipMember): ProfileDetail[] {
     { icon: 'users', label: 'Grade', value: member.grade },
     { icon: 'school', label: 'School', value: member.school },
     { icon: 'map-pin', label: 'Region', value: member.region },
+    /* Both are absent for several people and present for most. A detail row
+       with a falsy value is filtered out by ProfileModal, so no placeholder
+       text is ever invented for someone who did not supply one. */
+    { icon: 'craft', label: 'Extracurriculars', value: member.extracurriculars },
+    { icon: 'globe', label: 'Interests', value: member.interests },
     {
       icon: 'linkedin',
       label: 'LinkedIn',

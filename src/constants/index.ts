@@ -155,10 +155,15 @@ export const BIG_NUMBERS: readonly BigNumberSpec[] = [
 export const DOCS = {
   constitution:
     'https://docs.google.com/document/d/1posljuPV7E7J2FoKIQcij3u8srhYzqFB_ICeDiOZeOc',
-  /* /preview renders the doc without the Google Docs chrome. Requires the
-     document to be shared as "anyone with the link can view". */
+  /**
+   * The PUBLISHED embed (File → Share → Publish to web), which is what the
+   * live site uses. A `/preview` URL on the document id above renders a
+   * sign-in wall unless the doc happens to be shared link-public; a published
+   * URL always renders. Note the id here is the PUBLICATION id and is not the
+   * same string as the document id in `constitution` — that is expected.
+   */
   constitutionEmbed:
-    'https://docs.google.com/document/d/1posljuPV7E7J2FoKIQcij3u8srhYzqFB_ICeDiOZeOc/preview',
+    'https://docs.google.com/document/d/e/2PACX-1vSaaff-zcklIabTOdzSE4GacQ1o_YwWSuJXzWKtF8ProTeE81jBwwpeOZxkSifKN9ITkHyj9y6i9Udw/pub?embedded=true',
   whatIsPnt:
     'https://docs.google.com/presentation/d/18T6YPQbsOw8G0PiixNEzHojUWB8P3dUa2w-_2eBqLao/preview?slide=id.g27ef13cd484_1_1',
   driveRoot: 'https://drive.google.com/drive/folders/0AGqn2uvn83zJUk9PVA',
@@ -189,8 +194,17 @@ export const DOCS = {
 export const FORMS = {
   /** Placeholder until the real Leadership Application exists. */
   leadershipApplication: 'https://forms.gle/KBJzrhxrG6FNEBtz7',
+  /** Embedded on Contribute. Taken from the live site's /contribute page. */
+  partnership:
+    'https://docs.google.com/forms/d/e/1FAIpQLSfThOoGtbO4ltvp2bOnRIBv-Ivj4qt_MjZdB12cdPIfDdjrnQ/viewform',
   projectGroupCreation: 'https://forms.gle/vMXqw5e1zPH7m47b9',
   hoursRequest: 'https://forms.gle/PneL4s3LXThXmNKt5',
+  /**
+   * The volunteer registration form, linked from the news bar. This is the
+   * same form the live site embeds on its /join page as
+   * docs.google.com/forms/d/e/1FAIpQLScpE2rJqM4gI4q5C2Ry7PtYJZobi8DX6wITFvSlhmXKadXA_A —
+   * the forms.gle link below is its short URL. Do not add a second copy.
+   */
   enrollment2026: 'https://forms.gle/Qe4hNkH8CN6eaew89',
   postEvent: 'https://forms.gle/GF1jbatjjcoSBWHn8',
   reimbursementRequest: 'https://forms.gle/puYRwhwpQbopSZ6E9',
@@ -202,25 +216,33 @@ export const FORMS = {
  * Donorbox campaign for the Contribute page.
  *
  * OPEN ITEM: the live site's Contribute page does not expose a campaign slug,
- * so PNT needs to supply it from their Donorbox dashboard (Campaign →
- * Embed / Share). Until `campaignSlug` is set, the page renders a labelled
- * placeholder instead of the donation form.
+ * The slug and the query string below are the live site's, lifted verbatim
+ * from its DonorboxEmbed component so the two sites collect donations against
+ * the same campaign with the same defaults.
+ *
+ * `embedParams` is what makes the form open on a monthly interval at $100 and
+ * tags the gift with a designation. Dropping it still works — you just get
+ * Donorbox's own defaults instead.
  */
 export const DONORBOX = {
-  campaignSlug: null,
+  campaignSlug: 'donate-to-project-nextech',
   embedBase: 'https://donorbox.org/embed/',
+  embedParams:
+    'default_interval=m&designation=General+donation+that+our+student+leaders+may+allocate+as+needed&amount=100',
 }
 
 /**
  * Google MyMap shown on the Impact page.
  *
- * OPEN ITEM: PNT needs to supply the embed URL — open the map in My Maps,
- * choose Share → Embed, and copy the `src` out of the iframe it generates.
- * Until `embedUrl` is set the page renders a labelled placeholder.
+ * WARNING: the `/u/0/` segment is a Google ACCOUNT SLOT, not part of the map
+ * id. This URL previously said `/u/2/`, which resolves only for someone whose
+ * third signed-in Google account can see the map — for everyone else the
+ * iframe renders a permission error. The live site uses `/u/0/` and works.
+ * Keep it at 0 whatever My Maps hands you when you copy an embed URL.
  */
 export const MYMAP = {
   embedUrl:
-    'https://www.google.com/maps/d/u/2/embed?mid=1cfW8EF2DcCvJ3TkhxMR73vx3O3sCFfA&ehbc=2E312F',
+    'https://www.google.com/maps/d/u/0/embed?mid=1cfW8EF2DcCvJ3TkhxMR73vx3O3sCFfA&ehbc=2E312F',
 }
 
 /**
