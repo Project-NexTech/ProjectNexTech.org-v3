@@ -1,0 +1,73 @@
+/* Where the active groups are, above the cards and below the subtitle.
+   `overflow: hidden` is what makes Leaflet's square tiles respect the radius. */
+.mapFrame {
+  margin-bottom: 2.5rem;
+  height: 380px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+/* Leaflet sizes the popup to its content, so the width is set here. */
+.popup {
+  width: 13rem;
+  padding: 0.75rem;
+}
+
+.popupName {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--heading);
+}
+
+.popupCode {
+  margin-top: 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-faint);
+}
+
+.popupAffiliation {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.625;
+  color: var(--text-muted);
+}
+
+.popupRegion {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Label styled like the Curriculum course code — uppercase mono at the same
+   size — with the lead names stacked underneath, one line and icon per lead. */
+.leadLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.leads {
+  margin-top: 0.25rem;
+}
+
+.lead {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.lead + .lead {
+  margin-top: 0.125rem;
+}
+
+.leadIcon {
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+  color: var(--accent-alt);
+}

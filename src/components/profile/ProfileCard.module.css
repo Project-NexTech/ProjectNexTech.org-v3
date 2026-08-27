@@ -1,0 +1,43 @@
+.card {
+  display: flex;
+  height: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.image {
+  width: 8rem;
+  flex-shrink: 0;
+}
+
+.body {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.375;
+  color: var(--heading);
+}
+
+.subtitle {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.meta {
+  margin-top: 0.5rem;
+}
+
+/* `margin-top: auto` pins this to the bottom of the card however tall the
+   identity block above it turns out to be, so a row of cards lines up. */
+.more {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  text-align: left;
+  font-size: 0.875rem;
+}

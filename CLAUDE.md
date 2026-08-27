@@ -50,7 +50,7 @@ there is no "remove Tailwind" step because there is nothing to remove.
 | 1 | Foundation — tokens, Preflight replacement, breakpoints, fonts, constants/context/data in TS, `public/`, root layout, 13 routes, `/discord` | Complete |
 | 2 | Primitives → `.tsx` + CSS Modules (Card, Button, Tag, Icon, SectionHeader, PageHeader, Wordmark, ImagePlaceholder, BigNumber, CountUp, Reveal, Carousel, ProtectedEmail) | Complete |
 | 3 | Layout chrome (Navbar, Footer, NewsBar, ContactPopup, ThemeToggle) + `Article.tsx` | Complete |
-| 4 | Feature components + all 13 pages | Not started |
+| 4 | Feature components + all 13 pages | Complete |
 | C | Real content pass — the 177 images and the real roster from `../ProjectNexTech.org-new/` | Not started |
 
 Phases 5-8 of `NEXTJS_MIGRATION.md` (Postgres, the API repo, auth, VPS) are
@@ -122,9 +122,10 @@ plus a 404.
    structure to JSON` before it lints anything. This is exactly the trap
    `AGENTS.md` warns about.
 
-**Temporary, delete when superseded:** `<TemporaryChrome>` and `.tempNav` in
-`src/app/layout.{tsx,module.css}` (Phase 3, when Navbar lands), and
-`src/components/dev/PagePlaceholder.*` (Phase 4, when the last page is ported).
+**Temporary scaffolding is all gone as of Phase 4:** `<TemporaryChrome>` and
+`.tempNav` were removed in Phase 3, `src/components/dev/PagePlaceholder.*` and
+`src/app/dev/` in Phase 4. Nothing under `src/` is a stand-in for code any
+more; the remaining placeholders are *content* (see Phase C).
 
 **Verified at the Phase 1 gate:** `tsc --noEmit` clean · `eslint` clean ·
 `next build` clean, 13 routes prerendered · all 12 routes + a 404 serve 200/404
@@ -329,3 +330,156 @@ visible at every width. ContactPopup renders inside the sticky `<header>` at
 `top: 100%`, 380px wide, z-index 50, with the toggle carrying
 `data-contact-toggle`. In dark mode the header is `--surface` at 95% behind a
 blur, with the orange rule above and the lifted-blue rule below.
+
+## Phase 4 notes
+
+Delivered: the feature components (`RotatingTagline`, `HomeCtas`,
+`GradeRange`, `CourseCard`, `ProfileCard`, `ProfileGrid`, `ProfileModal`,
+`SearchPanel`, `DiscordWidget`, `PntMap` + `MapClient`, `ClosingCta`) and all
+13 pages. `src/app/dev/` and `src/components/dev/` are deleted.
+
+New dependencies: `leaflet`, `react-leaflet`, `recharts`, `papaparse` (plus
+`@types/leaflet` and `@types/papaparse`). PapaParse and `public/data/programs.csv`
+both disappear when Programs reads the API (Part C).
+
+### The page/island split
+
+Every page file is a **Server Component that exports `metadata`**. Where a page
+needs browser state, that state lives in one sibling client island rather than
+in the page:
+
+| Page | Island | Why it is ONE island, not several |
+|---|---|---|
+| `/` | `components/home/HomeCtas` | only "Host a program" needs `openContact` |
+| `/leadership` | `LeadershipRoster` | four grids, ONE shared `ProfileModal` |
+| `/project-groups` | `GroupDirectory` | map + grid + the same shared modal |
+| `/curriculum` | `SubjectTabs` | tab state drives the card grid |
+| `/programs` | `ProgramSearch` | filters, CSV, and map framing are one machine |
+| `/dashboard` | `DashboardView` | gated on `isLoggedIn` in its entirety |
+
+`/about`, `/impact`, `/volunteer`, `/terms`, `/policies`, `/contribute` have no
+island at all — their only client code is `Reveal`, `Carousel`, `CountUp`, and
+`DiscordWidget`, each of which owns its own boundary.
+
+**`Article.tsx` still has no directive, and this is now load-bearing in
+production.** Four pages author articles from a Server Component. Verified at
+the gate: rail blocks land in the rail on every one of them (see below). This
+is the Phase 3 client-reference bug, and it would have come back silently.
+
+### Two prerender hazards that the prototype could not have
+
+Both are the same shape: a value that is fine in a client-only SPA but wrong
+when the page is prerendered AND server-rendered before hydration. Both are
+fixed with `useSyncExternalStore`, the same pattern `themeStore.ts` uses.
+
+**1. Curriculum's "a different subject leads each visit."** The prototype wrote
+`useState(() => random subject)`. Here that either bakes one subject into the
+static HTML forever, or differs between the server render and the first client
+render — a hydration mismatch. `SubjectTabs.tsx` therefore reads the lead
+subject from a store: the server snapshot is `SUBJECTS[0]`, and the client
+snapshot picks once, lazily, and keeps it. Verified: six loads produced four
+different leading subjects, with zero console errors.
+
+**2. Programs' default date range.** `NEXTJS_MIGRATION.md` §2.5 flagged this.
+`new Date()` at module scope does NOT help — a Client Component is still
+server-rendered for the initial HTML, so the server's clock and the browser's
+disagree. `ProgramSearch.tsx` uses a `todayIso` store whose **server snapshot
+is the empty string**, which renders empty date inputs. Verified: the served
+HTML carries `value=""` for both inputs, the browser fills in today and +30
+days, and the page logs zero console errors.
+
+In both cases the state that the user then edits is `useState<T | null>(null)`
+with the store value as the fallback (`selectedId ?? leadSubjectId`,
+`edited ?? defaults`). That is what keeps the defaults tracking the store as it
+arrives without ever calling `setState` from an effect.
+
+### Other Phase 4 decisions
+
+- **`MapClient` is the only supported way to render a map.** `PntMap` must
+  never be imported by a page: Leaflet reads `window` at import time, so it
+  needs `ssr: false`, and in Next 16 that spelling is illegal in a Server
+  Component (§2.6). `MapClient` exists purely to give `dynamic()` a Client
+  Component to live in.
+- **Recharts loads through `next/dynamic` too**, but WITHOUT `ssr: false` — it
+  is SSR-safe, and the split is only about keeping ~370 kB off the initial
+  payload. Verified: `recharts` appears nowhere in `/dashboard`'s served HTML.
+  The `loading` fallbacks reserve each chart's exact height so the panel does
+  not jump.
+- **The two "open item" embeds render labelled, dashed stand-ins** rather than
+  nothing when their constant is unset (`DONORBOX.campaignSlug` on Contribute,
+  `MYMAP.embedUrl` on Impact). A blank column reads as a bug; a labelled box
+  reads as waiting on PNT. See LAUNCH_READINESS.md.
+- **Tailwind's named `group/info`** on the Curriculum card's tooltip becomes
+  `.info:hover .tooltip, .info:focus-within .tooltip`. Keyboard access is not
+  incidental here — verified that focusing the button alone reveals it.
+- **`ClosingCta`** was extracted rather than letting `/project-groups` import
+  `/leadership`'s `page.module.css`. A cross-route CSS import would have worked
+  and would have been wrong.
+- **`DiscordWidget` fetches from the browser, deliberately.** Doing it in a
+  Server Component would put Discord's latency on every render and cache one
+  server's view of a live number for every visitor.
+- **`<img>` (not `next/image`) in two more places**, each with the lint rule
+  disabled inline and a reason: Discord member avatars (remote CDN URLs that
+  would need a `remotePatterns` entry, at 28px) and the Volunteer page's
+  40px cursor glyph. Same standing decision as `ImagePlaceholder` and the
+  Navbar logo; revisit all of them together in Phase C.
+
+### Toolchain footnote
+
+`npm run build` still fails with the Node 23 `workStore` invariant even when
+Node 22 is first on `PATH` — the `next` shim resolves `node` through the nvm4w
+symlink, not through `PATH`. Building as
+
+```bash
+node ./node_modules/next/dist/bin/next build
+```
+
+with a Node 22 `node` succeeds. Pinning the runtime (`.nvmrc`, Docker base
+image) before Phase 8 removes the whole trap.
+
+**Verified at the Phase 4 gate** (Node 22, `next build` + `next start`, driven
+in a real browser at 1440 / 1100 / 1023px, light and dark): `tsc` clean,
+`eslint` clean, **13/13 routes prerendered**, **zero unresolved media queries**,
+and **no hydration warnings on any page** — every console error is an expected
+`public/media/` 404, and the only console warnings are Next's own CSS-chunk
+preloads plus Google's inside the My Maps iframe.
+
+- **Article on Server-Component pages** — About: 5 rail figures in one section,
+  `height: 0` cells, absolute contents, `minHeight` 331/1523px, zero overlaps.
+  Impact: all three rail block types land in the rail (`FIGURE`, `RailCarousel`,
+  `Note`), zero overlaps across four sections. Highlights alternate orange,
+  blue, orange ACROSS section boundaries on About (3), Impact (4), Volunteer
+  (5), Terms (3). Terms `fullWidth` renders 1092px prose beside a 0px rail. At
+  1023px: one column, `minHeight` and transforms cleared, rail capped at 420px.
+- **Leaflet** — CARTO light basemap in light mode and `dark_all` in dark
+  (the `key={resolvedTheme}` swap), `.leaflet-container` `z-index: 0`, 20
+  markers alternating orange/blue, zoom control top-right, both attributions.
+  The doubled overrides still win from a lazily-loaded chunk: zoom buttons
+  `#1b1e22`, attribution links in lifted blue.
+- **The modal-over-map rule holds** — with a group popup open,
+  `elementFromPoint` over the visible map returns the modal scrim, not Leaflet.
+- **ProfileModal** — portaled to `<body>`, `z-index: 50`, `overflow: hidden` on
+  `<body>`, dialog focused, 570/260 panels, prose capped at 288px, Escape
+  closes and restores scroll. Group labels relabelled per the brief.
+- **Programs** — CSV parsed, 6 programs found, 6 venue markers, scrim gone
+  after search, panel docked at 290px/left 12px, zoom control appears only
+  once unfrozen, venue popup themed at 256px with a signup link.
+- **Dashboard** — `noindex, nofollow`; signed out shows Log in; signed in shows
+  "Hi, Nexus", 808/300 layout, 3 Recharts surfaces (3 donut slices, 13 bars),
+  10 table rows, 5 quick links, 5 link groups, 9 profile fields, sticky aside.
+- **GradeRange** — all six labels on ONE row (identical `getBoundingClientRect`
+  top), unique anchors, highs anchored right, ideal bar directly on the OK bar,
+  both school transitions with their titles.
+- **Curriculum** — tabs alternate orange/blue, auto-advance at 10s, a click
+  extends the next interval to 30s. Info tooltip opens on focus alone.
+- **Home** — tagline rotates every 4s over a hidden height reservation;
+  CountUp reaches 2,650+ / 19+ / 7,600+ / 260+ on scroll.
+- **Volunteer** — `youtube-nocookie` embed, Slides box at
+  `calc(56.25% + 38px)` = 614px at 1024px wide, and the live Discord widget
+  (495 members / 103 online / 8 avatars) in real blurple `#5865f2`.
+- **ProtectedEmail still holds** on Terms and Contribute: `textContent` reads
+  `"orgproject nextechinfo"` / `"orgproject nextechec"`, and neither real
+  address appears anywhere in the served HTML.
+- **Navbar two-stage collapse** — >=xl all inline; lg..xl primary inline with
+  utilities folded; <lg logo, one theme toggle, and the hamburger only.
+  Exactly one theme toggle visible at every width.

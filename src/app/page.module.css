@@ -1,0 +1,34 @@
+/* Section rhythm for the whole page. */
+.root > * + * {
+  margin-top: 4rem;
+}
+
+.lede {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  color: var(--text-muted);
+}
+
+.wordmark {
+  color: var(--heading);
+}
+
+/* Capped rather than full-bleed: at the container's full width a 16:9 frame is
+   tall enough to push the CTAs and Big Numbers off-screen. */
+.carousel {
+  margin-inline: auto;
+  max-width: 900px;
+  text-align: center;
+}
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+@media (--lg) {
+  .numbers {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

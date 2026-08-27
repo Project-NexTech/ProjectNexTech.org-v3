@@ -1,0 +1,82 @@
+.partners {
+  margin-top: 5rem;
+}
+
+.partnerGrid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (--md) {
+  .partnerGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (--lg) {
+  .partnerGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.card {
+  display: flex;
+  height: 100%;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.logo {
+  width: 5rem;
+  flex-shrink: 0;
+}
+
+.partnerBody {
+  min-width: 0;
+}
+
+.partnerName {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 1.375;
+}
+
+.tier {
+  margin-top: 0.125rem;
+  font-size: 0.875rem;
+}
+
+/* Sponsor tiers are named metals, so they get literal metal colors rather than
+   brand tokens — the same in both themes, which is the point. */
+.toneAccent {
+  color: var(--accent);
+}
+
+.toneAccentAlt {
+  color: var(--accent-alt);
+}
+
+.toneBronze {
+  color: var(--tier-bronze);
+}
+
+.toneSilver {
+  color: var(--tier-silver);
+}
+
+.toneGold {
+  color: var(--tier-gold);
+}
+
+.tierBold {
+  font-weight: 600;
+}
+
+.description {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.625;
+  color: var(--text-muted);
+}

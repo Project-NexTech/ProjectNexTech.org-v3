@@ -1,13 +1,24 @@
 import type { Metadata } from 'next'
 
-import PagePlaceholder from '@/components/dev/PagePlaceholder'
+import ProgramSearch from './ProgramSearch'
+import s from './page.module.css'
 
 export const metadata: Metadata = {
   title: 'Programs',
   description:
-    'Search upcoming and past Project NexTech programs by subject, grade, region, and date, and find one near you on the map.',
+    'Find a free Project NexTech program near you. Search upcoming programs by date, grade, subject, and region.',
 }
 
 export default function ProgramsPage() {
-  return <PagePlaceholder title="Programs" phase="Phase 4" />
+  return (
+    <div className={s.root}>
+      <h1 className={s.title}>Find a program</h1>
+      <p className={s.lede}>
+        Every upcoming Project NexTech program, free to attend. Search by date, grade, subject,
+        and region.
+      </p>
+
+      <ProgramSearch />
+    </div>
+  )
 }

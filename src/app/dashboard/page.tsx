@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import PagePlaceholder from '@/components/dev/PagePlaceholder'
+import DashboardView from './DashboardView'
 
 export const metadata: Metadata = {
   title: 'Dashboard',
@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardPage() {
-  return <PagePlaceholder title="Dashboard" phase="Phase 4" />
+  return <DashboardView />
 }

@@ -1,0 +1,9 @@
+.root {
+  margin-top: 5rem;
+  text-align: center;
+}
+
+.body {
+  margin-top: 0.75rem;
+  color: var(--text-muted);
+}

@@ -1,13 +1,204 @@
 import type { Metadata } from 'next'
 
-import PagePlaceholder from '@/components/dev/PagePlaceholder'
+import Article, {
+  ArticleSection,
+  Figure,
+  Highlight,
+  Note,
+  P,
+  RailCarousel,
+} from '@/components/article/Article'
+import BigNumber from '@/components/ui/BigNumber'
+import Icon from '@/components/ui/Icon'
+import PageHeader from '@/components/ui/PageHeader'
+import Reveal from '@/components/ui/Reveal'
+import { cx } from '@/lib/cx'
+import { BIG_NUMBERS, IMPACT_REPORTS, MYMAP } from '@/constants'
+import s from './page.module.css'
 
 export const metadata: Metadata = {
   title: 'Impact',
   description:
-    'The reach of our programs in numbers, quarterly impact reports, and a map of everywhere we have taught.',
+    'How far Project NexTech programs reach, what they change for students and volunteers, and our quarterly impact reports.',
+}
+
+/** Long captions, per the brief — these stand in for volunteer quotes. */
+const VOLUNTEER_CAROUSEL = [
+  'This is a placeholder caption standing in for a direct quote from a volunteer about what running their first program taught them, why they came back for a second one, and what they would tell a student considering signing up to teach.',
+  'This is a placeholder caption standing in for a quote from a volunteer who moved from assisting classes to leading a department, describing what changed about the work and what they had to learn to make that step.',
+  'This is a placeholder caption standing in for a quote from a volunteer who started a project group in their own city, covering how they recruited other students and what the first few months actually looked like.',
+].map((caption, index) => ({
+  src: `/media/impact/volunteers/volunteers-${String(index + 1).padStart(2, '0')}.png`,
+  caption,
+}))
+
+/**
+ * OPEN ITEM (LAUNCH_READINESS.md): PNT has to supply the My Maps embed URL —
+ * Share -> Embed, then copy the iframe's src. Until then this renders a
+ * labelled stand-in rather than a blank band at the top of the page.
+ */
+function MyMapEmbed() {
+  if (!MYMAP.embedUrl) {
+    return (
+      <div className={s.placeholder}>
+        <p className={s.placeholderLabel}>Google MyMap embed</p>
+        <p className={s.placeholderBody}>
+          The map of everywhere we have run programs appears here once an embed URL is set. In
+          Google My Maps choose Share → Embed, copy the iframe&rsquo;s <code>src</code>, and set{' '}
+          <code>MYMAP.embedUrl</code> in <code>src/constants/index.ts</code>.
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <iframe
+      src={MYMAP.embedUrl}
+      title="Map of Project NexTech programs"
+      className={s.embed}
+    />
+  )
 }
 
 export default function ImpactPage() {
-  return <PagePlaceholder title="Impact" phase="Phase 4" />
+  return (
+    <div>
+      <PageHeader
+        title="See our impact"
+        subtitle="This is placeholder subtitle text describing how we measure the reach of our programs and what the numbers below actually count."
+      />
+
+      {/* Full width of the content container, matching the navbar's bounds. */}
+      <section>
+        <MyMapEmbed />
+      </section>
+
+      <section className={s.numbers}>
+        <ul className={s.numberGrid}>
+          {BIG_NUMBERS.map((number, index) => (
+            <Reveal as="li" key={number.key} delay={(index % 4) * 70}>
+              {/* Offsetting by the row index turns the alternation into a
+                  checkerboard, so the second row of four starts on blue
+                  instead of repeating the first row's orange. */}
+              <BigNumber number={number} index={index + Math.floor(index / 4)} />
+            </Reveal>
+          ))}
+        </ul>
+      </section>
+
+      <Article className={s.article}>
+        <ArticleSection title="Impact on our students" id="students">
+          <P>
+            This is placeholder text about what students take away from our programs. It
+            should run three to six sentences and be specific about what changes for a
+            student between walking in and walking out.
+          </P>
+          <Figure
+            src="/media/impact/students/students-01.png"
+            caption="Placeholder caption for a photo of students during a program."
+          />
+
+          <Highlight>
+            A placeholder highlight line, ideally a statistic about student outcomes.
+          </Highlight>
+
+          <P>
+            This is a placeholder paragraph about the students who come back for multiple
+            courses, and what we see change across a series rather than a single session.
+          </P>
+
+          <Highlight>
+            A second placeholder highlight line about what students say afterwards.
+          </Highlight>
+
+          <P>
+            This is a placeholder paragraph about students who went on to compete in
+            science fairs, join robotics teams, or start their own projects.
+          </P>
+          <Figure
+            src="/media/impact/students/students-02.png"
+            caption="Placeholder caption for a photo of a student presenting their work."
+          />
+        </ArticleSection>
+
+        <ArticleSection title="Building volunteers and leaders" id="volunteers">
+          <P>
+            This is placeholder text about what running programs does for the volunteers
+            themselves, who are students too. Three to six sentences.
+          </P>
+          <RailCarousel items={VOLUNTEER_CAROUSEL} />
+
+          <Highlight>A placeholder highlight line about volunteer growth.</Highlight>
+
+          <P>
+            This is a placeholder paragraph about how volunteers move into department and
+            leadership roles, and what they take on when they do.
+          </P>
+
+          <Highlight>
+            A second placeholder highlight line, ideally a volunteer statistic.
+          </Highlight>
+
+          <P>
+            This is a placeholder paragraph about where our volunteers go afterwards and
+            what they carry with them from the experience.
+          </P>
+        </ArticleSection>
+
+        <ArticleSection title="Shaping better communities" id="communities">
+          <P>
+            This is placeholder text about what changes for a neighborhood when free STEM
+            programming runs there consistently. It should cover the role our library and
+            school partners play in making that possible.
+          </P>
+          <Figure
+            src="/media/impact/communities/communities-01.png"
+            caption="Placeholder caption for a photo from a community program."
+          />
+
+          <P>
+            This is a placeholder paragraph about the regions we have reached and what we
+            have learned about starting up somewhere new.
+          </P>
+        </ArticleSection>
+
+        <ArticleSection title="Quarterly impact reports" id="reports">
+          <P>
+            This is placeholder text explaining what goes into a quarterly impact report
+            and how we compile the figures. Three to four sentences.
+          </P>
+          <Note title="All reports">
+            <ul className={s.reports}>
+              {IMPACT_REPORTS.map((report, index) => (
+                <li key={report.label}>
+                  <a
+                    href={report.path}
+                    target="_blank"
+                    rel="noreferrer"
+                    /* Alternates orange/blue down the list, matching the Big
+                       Numbers and article highlights. */
+                    className={cx(
+                      'cursor-external',
+                      s.report,
+                      index % 2 === 0 ? s.reportAccent : s.reportAlt,
+                    )}
+                  >
+                    <span className={s.reportIcon}>
+                      <Icon name="document" size={13} />
+                    </span>
+                    {report.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Note>
+
+          <P>
+            This is a placeholder paragraph about how far back the reports go and what
+            changed in how we counted things between the earliest ones and today.
+          </P>
+        </ArticleSection>
+      </Article>
+    </div>
+  )
 }

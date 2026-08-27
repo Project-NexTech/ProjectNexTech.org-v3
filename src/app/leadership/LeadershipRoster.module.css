@@ -1,0 +1,46 @@
+.section + .section {
+  margin-top: 4rem;
+}
+
+/* The Board of Advisors grid: the chair spans two rows, and normal auto-flow
+   places the name-only cards around them. At three columns the first four fill
+   the two columns beside the chair and the fifth wraps underneath; at two
+   columns the third wraps underneath; at one column everything stacks. */
+.advisors {
+  grid-template-columns: 1fr;
+}
+
+@media (--sm) {
+  .advisors {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (--lg) {
+  .advisors {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.featured {
+  grid-row: span 2 / span 2;
+}
+
+.advisorCard {
+  height: 100%;
+  padding: 0.75rem 1rem;
+}
+
+.advisorName {
+  font-family: var(--font-display);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.375;
+  color: var(--heading);
+}
+
+.advisorRole {
+  margin-top: 0.125rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}

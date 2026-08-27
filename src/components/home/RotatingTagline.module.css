@@ -1,0 +1,38 @@
+.root {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  line-height: 1.15;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+@media (--sm) {
+  .root {
+    font-size: 3rem;
+  }
+}
+
+@media (--lg) {
+  .root {
+    font-size: 3.75rem;
+  }
+}
+
+.reserve {
+  display: block;
+  visibility: hidden;
+}
+
+.line {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+
+/* The rise is decorative; the text is already correct without it. */
+@media (prefers-reduced-motion: no-preference) {
+  .line {
+    animation: cta-rise 500ms ease-out;
+  }
+}

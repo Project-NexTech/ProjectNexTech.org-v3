@@ -1,0 +1,32 @@
+.grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (--md) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (--lg) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Shared by the Leadership popup's ROLES row and the Project Groups popup's
+   leads/members rows: a list of short lines inside one <dd>. */
+.lines {
+  display: block;
+}
+
+.lines > span {
+  display: block;
+}
+
+.lines > span + span {
+  margin-top: 0.125rem;
+}

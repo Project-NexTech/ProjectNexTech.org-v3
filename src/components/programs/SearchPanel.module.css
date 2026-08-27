@@ -1,0 +1,102 @@
+.stack > * + * {
+  margin-top: 1rem;
+}
+
+.stackTight > * + * {
+  margin-top: 0.75rem;
+}
+
+.dateRow {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (--sm) {
+  .dateRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.field {
+  display: block;
+  text-align: left;
+}
+
+.fieldLabel {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: var(--text-faint);
+}
+
+.input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  padding: 0.5rem 0.625rem;
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  outline: none;
+}
+
+/* The native date picker indicator is drawn dark-on-dark by default. */
+.input::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+}
+
+.warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.375rem;
+  text-align: left;
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+
+.warningIcon {
+  margin-top: 0.125rem;
+  flex-shrink: 0;
+}
+
+.checkList > * + * {
+  margin-top: 0.375rem;
+}
+
+@media (--sm) {
+  .checkGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.375rem;
+  }
+
+  /* The grid supplies the gap; the stacked spacing would double it. */
+  .checkGrid > * + * {
+    margin-top: 0;
+  }
+}
+
+.check {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text);
+}
+
+.checkbox {
+  accent-color: var(--accent);
+}
+
+.submit {
+  width: 100%;
+}

@@ -1,0 +1,76 @@
+.tablist {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  padding: 0.25rem;
+}
+
+.tab {
+  flex: 1;
+  white-space: nowrap;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 2px;
+  transition: color 150ms ease, background-color 150ms ease;
+}
+
+/* Subjects alternate orange/blue down the row, driven by list position. */
+.accent {
+  color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.alt {
+  color: color-mix(in srgb, var(--accent-alt) 70%, transparent);
+}
+
+.tab:not(.active):hover {
+  background: var(--surface-raised);
+}
+
+.accent:not(.active):hover {
+  color: var(--accent);
+}
+
+.alt:not(.active):hover {
+  color: var(--accent-alt);
+}
+
+.active {
+  text-decoration-line: underline;
+}
+
+.accent.active {
+  background: var(--accent-wash);
+  color: var(--accent);
+  text-decoration-color: color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+.alt.active {
+  background: var(--accent-alt-wash);
+  color: var(--accent-alt);
+  text-decoration-color: color-mix(in srgb, var(--accent-alt) 70%, transparent);
+}
+
+.grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (--md) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (--lg) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

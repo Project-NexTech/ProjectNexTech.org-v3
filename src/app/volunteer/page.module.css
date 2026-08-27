@@ -1,0 +1,125 @@
+.section {
+  margin-top: 4rem;
+}
+
+.frame {
+  margin-inline: auto;
+  margin-top: 2rem;
+  max-width: 64rem;
+}
+
+.video {
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}
+
+.videoFallback {
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.videoFallback code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* ---- Discord ---- */
+
+.discord {
+  margin-inline: auto;
+  margin-top: 2rem;
+  display: grid;
+  max-width: 56rem;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+@media (--sm) {
+  .discord {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.invite {
+  text-align: center;
+}
+
+.logo {
+  position: relative;
+  display: inline-block;
+  color: var(--brand-discord);
+  transition: opacity 150ms ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+/* Redirect cursor glyph as a static affordance. It stays PNT blue while the
+   logo itself keeps Discord's own blurple. */
+.logoCursor {
+  pointer-events: none;
+  position: absolute;
+  bottom: -0.25rem;
+  right: -0.75rem;
+}
+
+.inviteBody {
+  margin-top: 1.25rem;
+  font-size: 1rem;
+  line-height: 1.625;
+  color: var(--text-muted);
+}
+
+/* ---- article ---- */
+
+.article {
+  margin-top: 4rem;
+}
+
+.bullets {
+  margin-left: 1.25rem;
+  list-style: disc;
+  color: var(--text);
+}
+
+.bullets > li + li {
+  margin-top: 0.25rem;
+}
+
+.bullets > li::marker {
+  color: var(--accent);
+}
+
+/* ---- slides ---- */
+
+/* A Slides embed is a 16:9 deck PLUS a control bar, and that bar is a FIXED
+   pixel height — it does not scale with the iframe. So a plain aspect ratio
+   (even Google's own 1440x839) leaves the deck slightly letterboxed with black
+   bars either side at any other width. Reserving 16:9 for the deck and adding
+   the bar's height as a constant makes the deck fill the width exactly.
+
+   padding-bottom percentages resolve against the container's WIDTH, which is
+   what makes this work. The 38px is measured, not assumed — see the constant
+   in page.tsx. */
+.slidesBox {
+  position: relative;
+  width: 100%;
+}
+
+.slides {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+}

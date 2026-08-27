@@ -1,0 +1,5 @@
+/* Slightly smaller than the surrounding prose so the assembled address does
+   not read as louder than the sentence around it. */
+.email {
+  font-size: 0.95em;
+}

@@ -1,0 +1,16 @@
+/* Tall enough to read in, but capped to the viewport so the page below stays
+   reachable on a short screen. */
+.frame {
+  height: 80vh;
+  min-height: 600px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+
+.fallback {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}

@@ -1,0 +1,7 @@
+/* The container has no intrinsic size, so every caller must give the wrapping
+   element a height. */
+.map {
+  height: 100%;
+  width: 100%;
+  background: var(--surface-sunken);
+}

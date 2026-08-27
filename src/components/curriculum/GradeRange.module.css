@@ -1,0 +1,66 @@
+.root {
+  user-select: none;
+}
+
+.track {
+  position: relative;
+}
+
+/* Grade-school / middle / high boundaries, drawn between two grades. */
+.transition {
+  position: absolute;
+  top: 0;
+  width: 1px;
+  background: var(--border-strong);
+}
+
+.label {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1;
+}
+
+/* Highs are anchored by their right edge so a "12" cannot clip past the end. */
+.alignRight {
+  transform: translateX(-100%);
+}
+
+.bar {
+  position: absolute;
+  border-radius: var(--radius-xs);
+}
+
+.barAccent {
+  background: var(--accent);
+}
+
+.barAlt {
+  background: var(--accent-alt);
+}
+
+.baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.legend {
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.toneFaint {
+  color: var(--text-faint);
+}
+
+.toneAccent {
+  color: var(--accent);
+}
+
+.toneAlt {
+  color: var(--accent-alt);
+}

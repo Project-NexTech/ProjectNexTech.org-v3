@@ -1,0 +1,25 @@
+/* The one page that breaks the site's layout conventions: centered rather than
+   left-aligned, and modeled on the Google Flights landing page. */
+.root {
+  text-align: center;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+@media (--sm) {
+  .title {
+    font-size: 3rem;
+  }
+}
+
+.lede {
+  margin-inline: auto;
+  margin-top: 1rem;
+  max-width: 36rem;
+  color: var(--text-muted);
+}
