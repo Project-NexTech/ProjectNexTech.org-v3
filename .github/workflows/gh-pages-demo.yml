@@ -1,0 +1,97 @@
+# TEMPORARY — GitHub Pages demo of the v3 frontend.
+#
+# Delete this file to stop deploying. Full revert checklist:
+# GITHUB_PAGES_DEMO.md
+#
+# Adapted from ../ProjectNexTech.org-new/.github/workflows/nextjs.yml, with
+# four deliberate differences from that file — see GITHUB_PAGES_DEMO.md
+# "What changed from the old repo's workflow" for why each one:
+#
+#   1. Node 22, not 20            (`next build` breaks on Node 23; 22 is the
+#                                  line every phase gate here was verified on)
+#   2. No `static_site_generator: next` on configure-pages
+#   3. PNT_STATIC_EXPORT=1 gates the export on in next.config.ts
+#   4. A post-build step writes CNAME, /discord, and .nojekyll
+name: Deploy demo to GitHub Pages
+
+on:
+  push:
+    branches: ['main']
+  # So a demo can be refreshed without pushing.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; let an in-flight one finish.
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          # NOT 20, and emphatically not 23. `next build` dies on the Node 23
+          # line with `Invariant: Expected workStore to be initialized` while
+          # prerendering Next's internal /_global-error route. 22 is the LTS
+          # every phase gate in CLAUDE.md was verified on.
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+        # NOTE: `static_site_generator: next` is deliberately NOT set. That
+        # option rewrites next.config to inject a basePath for a project page.
+        # This demo is served from the ROOT of its own host, so an injected
+        # basePath would prefix every asset with /<repo> and 404 the entire
+        # site. It also patches next.config.js specifically and this repo's
+        # config is TypeScript. basePath is managed by hand in next.config.ts.
+
+      - name: Build static export
+        # The flag is the whole switch. Without it next.config.ts builds the
+        # real server configuration and never emits out/.
+        env:
+          PNT_STATIC_EXPORT: '1'
+          # Keeps canonical + OG URLs on the demo host instead of pointing
+          # every shared link at the real projectnextech.org.
+          NEXT_PUBLIC_SITE_HOST: beta.projectnextech.org
+        run: npm run build
+
+      - name: Write CNAME, /discord redirect and .nojekyll
+        run: node scripts/gh-pages/postbuild.mjs
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

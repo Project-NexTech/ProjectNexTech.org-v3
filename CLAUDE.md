@@ -24,6 +24,13 @@ Key decisions already made, so they are not re-litigated:
 - **Self-hosted on a VPS** (Coolify or manual) — *not* a static export, *not*
   GitHub Pages. `output: "export"` must never be set.
 
+  TEMPORARY EXCEPTION, 2026-08-27: a demo is parked on GitHub Pages until the
+  backend exists, which needs exactly the static export this rule forbids. It
+  is gated behind an env var only CI sets, so every build run by hand is
+  unchanged and this rule still holds for all of them. See
+  `GITHUB_PAGES_DEMO.md`, which is a revert checklist. Delete the demo before
+  phase 8.
+
 Companion documents:
 
 - `initial_prompt_v1.md` — the authoritative design/content spec. Wins on
@@ -162,6 +169,27 @@ not to have applied. The Phase C notes record the same failure arriving by a
 different route (`EADDRINUSE`).
 
 Both build commands need **Node 22** on `PATH` — see the next section.
+
+## Temporary: GitHub Pages demo
+
+**Read `GITHUB_PAGES_DEMO.md` before touching `next.config.ts`, the workflow,
+or `metadataBase`.** It is written as a revert checklist.
+
+Short version: the frontend finished ahead of the backend, so a demo is served
+from GitHub Pages at <https://beta.projectnextech.org> as a static export. Six
+files are involved; four are new and delete cleanly, two are edits.
+
+**The export is gated behind `PNT_STATIC_EXPORT`, which only the Pages workflow
+sets.** That is the part not to undo. With the flag unset — every local build,
+and the VPS — `next.config.ts` produces exactly what it produced before: no
+`out/`, the `/discord` 308 intact, `metadataBase` on the production domain.
+Setting `output: 'export'` directly in the config instead would make the rule
+above quietly false while still reading as true, and would silently discard the
+Route Handlers and sessions that phases 5-7 add.
+
+Deploys run on every push to `main`. If `beta.projectnextech.org` does not
+resolve yet, PNT still has to add the `beta` CNAME record and switch the repo's
+Pages source to GitHub Actions — see that document.
 
 ## Toolchain: use Node 22 LTS, not Node 23
 

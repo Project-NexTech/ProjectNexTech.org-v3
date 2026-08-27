@@ -43,10 +43,23 @@ const jetBrainsMono = JetBrains_Mono({
 const DESCRIPTION =
   'Project NexTech is a student-led nonprofit providing free, hands-on STEM education to students around the world.'
 
+/**
+ * TEMPORARY — GitHub Pages demo (GITHUB_PAGES_DEMO.md).
+ *
+ * The ONLY change this demo makes under src/. The Pages build serves from
+ * beta.projectnextech.org, and with the production domain hard-coded every
+ * canonical link and OG URL on the demo would point at the real site — so a
+ * link shared from the demo would preview as, and resolve to, projectnextech.org.
+ *
+ * Unset (every local build, and the VPS) this falls back to ORG.domain, which
+ * is exactly today's behavior. Revert by inlining `ORG.domain` again.
+ */
+const SITE_HOST = process.env.NEXT_PUBLIC_SITE_HOST || ORG.domain
+
 export const metadata: Metadata = {
   /* Required for openGraph.images and any other absolute URL Next has to
      build. Without it those resolve relative and link previews break. */
-  metadataBase: new URL(`https://${ORG.domain}`),
+  metadataBase: new URL(`https://${SITE_HOST}`),
   title: {
     default: ORG.name,
     /* Page files export a plain string; this wraps it. */
