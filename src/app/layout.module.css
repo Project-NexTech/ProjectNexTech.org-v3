@@ -20,29 +20,3 @@
   padding-inline: 1.5rem;
   padding-block: 2.5rem;
 }
-
-/* ---------------------------------------------------------------------------
-   TEMPORARY — Phase 1 only. Delete along with <TemporaryChrome> in layout.tsx
-   once the real Navbar lands in Phase 3. Deliberately plain: it should not be
-   mistaken for the finished chrome.
---------------------------------------------------------------------------- */
-.tempNav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 1rem;
-  padding: 0.75rem 1.5rem;
-  border-block-end: 1px dashed var(--border-strong);
-  background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-
-.tempNavLink {
-  color: var(--text-muted);
-}
-
-.tempNavLink:hover {
-  color: var(--accent);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}

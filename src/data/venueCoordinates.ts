@@ -2,7 +2,7 @@
  * Latitude/longitude for every program venue, keyed by the `name` field in
  * LOCATIONS (src/constants/index.ts).
  *
- * ⚠️ THESE COORDINATES ARE APPROXIMATE AND UNVERIFIED.
+ * WARNING: THESE COORDINATES ARE APPROXIMATE AND UNVERIFIED.
  *
  * They were written by hand to unblock the Programs map, not produced by a
  * geocoder. Expect them to be correct to the neighborhood but not to the

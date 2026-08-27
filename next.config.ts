@@ -7,6 +7,8 @@ import type { NextConfig } from 'next'
  * optimization. For Docker, set `output: "standalone"` instead (Appendix A.2).
  */
 const nextConfig: NextConfig = {
+  devIndicators: false,
+  reactStrictMode: true,
   async redirects() {
     return [
       {

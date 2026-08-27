@@ -2,7 +2,8 @@
  * Theme constants shared by a Server Component (app/ThemeScript.tsx) and a
  * Client Component (context/themeStore.ts).
  *
- * ⚠️ This file must NOT carry a 'use client' directive, and must not gain one.
+ * WARNING: This file must NOT carry a 'use client' directive, and must never
+ * gain one.
  *
  * Every export of a 'use client' module becomes an opaque *client reference*
  * in the server graph — the server sees a proxy, not the value. When this key

@@ -1,0 +1,25 @@
+/* Tailwind: transition-colors */
+.root {
+  transition: color 150ms ease;
+}
+
+/**
+ * Tailwind: text-accent underline decoration-accent/70 decoration-2
+ *           underline-offset-[6px]
+ */
+.active {
+  color: var(--accent);
+  text-decoration-line: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 70%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+}
+
+/* Tailwind: text-muted hover:text-heading */
+.inactive {
+  color: var(--text-muted);
+}
+
+.inactive:hover {
+  color: var(--heading);
+}

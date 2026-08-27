@@ -1,0 +1,96 @@
+/**
+ * Tailwind: inline-flex items-center justify-center gap-2 rounded-sm
+ *           transition-[background-color,border-color,color,transform]
+ *           duration-150 active:scale-[0.98]
+ */
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-sm);
+  transition-property: background-color, border-color, color, transform;
+  transition-duration: 150ms;
+}
+
+/* Slight press-in on click, for tactility. */
+.root:active {
+  transform: scale(0.98);
+}
+
+/* Tailwind: motion-reduce:active:scale-100 */
+@media (prefers-reduced-motion: reduce) {
+  .root:active {
+    transform: none;
+  }
+}
+
+/* ---- Variants ---- */
+
+/* Tailwind: bg-accent text-bg hover:bg-accent-hover border border-transparent font-medium */
+.primary {
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+.primary:hover {
+  background: var(--accent-hover);
+}
+
+/* Tailwind: bg-accent-alt text-bg hover:bg-accent-alt-hover border border-transparent font-medium */
+.alt {
+  border: 1px solid transparent;
+  background: var(--accent-alt);
+  color: var(--bg);
+  font-weight: 500;
+}
+
+.alt:hover {
+  background: var(--accent-alt-hover);
+}
+
+/* Tailwind: border border-border-strong text-heading hover:border-accent hover:text-accent */
+.secondary {
+  border: 1px solid var(--border-strong);
+  color: var(--heading);
+}
+
+.secondary:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Tailwind: border border-transparent text-muted hover:text-heading */
+.ghost {
+  border: 1px solid transparent;
+  color: var(--text-muted);
+}
+
+.ghost:hover {
+  color: var(--heading);
+}
+
+/* ---- Sizes ---- */
+
+/* Tailwind: px-3 py-1.5 text-sm */
+.sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Tailwind: px-4 py-2 text-sm */
+.md {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Tailwind: px-5 py-2.5 text-base */
+.lg {
+  padding: 0.625rem 1.25rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}

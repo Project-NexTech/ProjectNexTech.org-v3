@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 
-import Link from 'next/link'
-
-import { NAV_FOOTER, NAV_PRIMARY, ORG } from '@/constants'
+import { ORG } from '@/constants'
 import SiteProvider from '@/context/SiteProvider'
+import Footer from '@/components/layout/Footer'
+import SiteChrome from '@/components/layout/SiteChrome'
 import ThemeScript from './ThemeScript'
 import './globals.css'
 import s from './layout.module.css'
@@ -98,10 +98,11 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
       <body>
         <SiteProvider>
           <div className={s.shell}>
-            {/* PHASE 3 replaces this with NewsBar + Navbar + Footer. */}
-            <TemporaryChrome />
+            <SiteChrome />
 
             <main className={s.main}>{children}</main>
+
+            <Footer />
           </div>
         </SiteProvider>
       </body>
@@ -109,29 +110,3 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
   )
 }
 
-/**
- * TEMPORARY — Phase 1 only.
- *
- * The real Navbar, NewsBar, and Footer are Phase 3 (they depend on primitives
- * that do not exist yet). This exists so every route is reachable and the
- * routing work can actually be verified. Delete it, and `layout.module.css`'s
- * `.tempNav` block, when Navbar lands.
- */
-function TemporaryChrome() {
-  const links = [
-    { label: 'Home', to: '/' },
-    ...NAV_PRIMARY,
-    { label: 'Dashboard', to: '/dashboard' },
-    ...NAV_FOOTER,
-  ].filter((item): item is { label: string; to: string } => Boolean(item.to))
-
-  return (
-    <nav className={s.tempNav} aria-label="Temporary navigation (Phase 1)">
-      {links.map((item) => (
-        <Link key={item.to} href={item.to} className={s.tempNavLink}>
-          {item.label}
-        </Link>
-      ))}
-    </nav>
-  )
-}

@@ -1,0 +1,59 @@
+/* Tailwind: inline-flex items-center rounded-xs border font-mono uppercase tracking-wide */
+.root {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--radius-xs);
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* ---- Sizes ---- */
+
+/* Tailwind: gap-1.5 px-2 py-0.5 text-[11px] */
+.sm {
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  font-size: 11px;
+}
+
+/**
+ * Used for the Curriculum course badges, which share a row with the course
+ * code and info icon — bold keeps them legible at this size.
+ * Tailwind: gap-1 px-1.5 py-0 text-[9px] font-bold
+ */
+.xs {
+  gap: 0.25rem;
+  padding: 0 0.375rem;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* ---- Tones ---- */
+
+/* Tailwind: border-border text-muted */
+.neutral {
+  border-color: var(--border);
+  color: var(--text-muted);
+}
+
+/* Tailwind: border-accent/40 text-accent bg-accent-wash */
+.accent {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  color: var(--accent);
+  background: var(--accent-wash);
+}
+
+/* Tailwind: border-accent-alt/40 text-accent-alt bg-accent-alt-wash */
+.alt {
+  border-color: color-mix(in srgb, var(--accent-alt) 40%, transparent);
+  color: var(--accent-alt);
+  background: var(--accent-alt-wash);
+}
+
+/* Tailwind: border-border/60 text-faint */
+.quiet {
+  border-color: color-mix(in srgb, var(--border) 60%, transparent);
+  color: var(--text-faint);
+}

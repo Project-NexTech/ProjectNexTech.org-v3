@@ -1,0 +1,20 @@
+/**
+ * Type treatment only. The layout that does the actual scraper protection
+ * (row-reverse, the [at]/[dot] pseudo-elements, user-select: none) lives on
+ * the global `.protected-email` class in globals.css, because the separator
+ * classes are matched as descendants.
+ *
+ * Tailwind: font-mono font-bold text-accent | text-accent-alt
+ */
+.root {
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+
+.orange {
+  color: var(--accent);
+}
+
+.blue {
+  color: var(--accent-alt);
+}

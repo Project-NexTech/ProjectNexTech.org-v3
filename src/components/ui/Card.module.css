@@ -1,0 +1,40 @@
+/* Tailwind: rounded-md border border-border bg-surface */
+.root {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+/**
+ * A 2px lift on hover — enough to feel responsive, small enough not to jostle
+ * a grid of cards.
+ *
+ * Tailwind: transition-[transform,border-color,box-shadow] duration-200
+ *           hover:-translate-y-0.5 hover:border-border-strong hover:shadow-lg
+ */
+.interactive {
+  transition-property: transform, border-color, box-shadow;
+  transition-duration: 200ms;
+}
+
+.interactive:hover {
+  transform: translateY(-0.125rem);
+  border-color: var(--border-strong);
+  /* Tailwind shadow-lg */
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/**
+ * Tailwind: motion-reduce:hover:translate-y-0.
+ *
+ * The global reduced-motion block collapses the transition duration but not
+ * the transform itself, so the lift would still happen — just instantly.
+ * This removes the movement while keeping the border and shadow feedback.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .interactive:hover {
+    transform: none;
+  }
+}

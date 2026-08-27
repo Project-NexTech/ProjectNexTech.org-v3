@@ -1,0 +1,26 @@
+/**
+ * The four site breakpoints, in one place.
+ *
+ * This file is never imported. It is read by `@csstools/postcss-global-data`
+ * (see postcss.config.mjs), which injects these declarations into EVERY CSS
+ * file before `postcss-custom-media` resolves them — so any *.module.css can
+ * write `@media (--lg)`.
+ *
+ * WARNING: postcss-custom-media resolves declarations PER FILE. Without the
+ * global-data step, a `@media (--lg)` in a module file does not error — it
+ * ships to the browser verbatim, where it is an unrecognized media query and
+ * is silently ignored, so the rule simply never applies. Verify after any
+ * PostCSS change by grepping the built CSS:
+ *
+ *   grep -o 'media (--' .next/static/chunks/*.css   # must return nothing
+ *
+ * The values are Tailwind's defaults, which the prototype used throughout, and
+ * are kept identical so nothing shifts during the port.
+ *
+ * WARNING: Article.tsx hardcodes '(min-width: 1024px)' in JS to drive its rail
+ * layout. That constant and --lg must stay equal or the rail silently breaks.
+ */
+@custom-media --sm (min-width: 640px);
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 1024px);
+@custom-media --xl (min-width: 1280px);

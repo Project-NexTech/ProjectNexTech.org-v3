@@ -1,19 +1,11 @@
 /* ---------------------------------------------------------------------------
    Breakpoints
 
-   Custom properties are illegal in media query *conditions*, so these cannot be
-   ordinary tokens. postcss-custom-media resolves them at build time, letting
-   module files write `@media (--lg)`. The four values are Tailwind's defaults,
-   which the prototype used throughout — they are kept identical so nothing
-   shifts during the port.
-
-   ⚠️ Article.tsx hardcodes '(min-width: 1024px)' in JS to drive its rail
-   layout. That constant and --lg must stay equal or the rail silently breaks.
+   The @custom-media declarations live in src/app/breakpoints.css and are
+   injected into every CSS file by @csstools/postcss-global-data before
+   postcss-custom-media resolves them. See postcss.config.mjs for why that
+   indirection is required rather than declaring them here.
 --------------------------------------------------------------------------- */
-@custom-media --sm (min-width: 640px);
-@custom-media --md (min-width: 768px);
-@custom-media --lg (min-width: 1024px);
-@custom-media --xl (min-width: 1280px);
 
 /* ---------------------------------------------------------------------------
    PNT design tokens
@@ -302,6 +294,26 @@ hr {
   color: var(--heading);
 }
 
+/**
+ * Visually hidden, still announced by screen readers.
+ *
+ * Global rather than a module because it is a generic accessibility helper
+ * with no owner — Carousel's live region uses it, and so will anything else
+ * needing an announcement without a visible label. This is Tailwind's
+ * `sr-only`, which the prototype relied on.
+ */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+
 /* ---------------------------------------------------------------------------
    Custom link cursors
 
@@ -414,7 +426,7 @@ hr {
    onto the site's tokens. Scoped to Leaflet's own class names, so they apply
    wherever a map is used.
 
-   ⚠️ Every selector here is deliberately doubled up (.leaflet-container prefix,
+   WARNING: Every selector here is deliberately doubled up (.leaflet-container prefix,
    or the class repeated) to outrank Leaflet's own rules on SPECIFICITY rather
    than on source order. Leaflet's stylesheet is imported from a lazily-loaded
    client chunk, so it lands in the document AFTER this file and would

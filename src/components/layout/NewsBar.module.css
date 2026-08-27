@@ -1,0 +1,70 @@
+/* Tailwind: border-b border-border bg-surface-sunken */
+.root {
+  border-block-end: 1px solid var(--border);
+  background: var(--surface-sunken);
+}
+
+/* Tailwind: mx-auto flex max-w-[1180px] items-center gap-3 px-4 py-2 sm:px-6 */
+.inner {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-inline-size: 1180px;
+  margin-inline: auto;
+  padding: 0.5rem 1rem;
+}
+
+@media (--sm) {
+  .inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+/**
+ * Tailwind: flex flex-1 flex-wrap items-center justify-center gap-x-3 gap-y-1
+ *           text-center text-sm text-muted
+ */
+.text {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 0.75rem;
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-muted);
+}
+
+/**
+ * Tailwind: rounded-xs border border-accent/50 px-2 py-0.5 text-xs font-medium
+ *           text-accent hover:bg-accent-wash
+ */
+.button {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+  border-radius: var(--radius-xs);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  color: var(--accent);
+  transition: background-color 150ms ease;
+}
+
+.button:hover {
+  background: var(--accent-wash);
+}
+
+/* Tailwind: shrink-0 rounded-xs p-1 text-faint hover:text-heading */
+.dismiss {
+  flex-shrink: 0;
+  padding: 0.25rem;
+  border-radius: var(--radius-xs);
+  color: var(--text-faint);
+  transition: color 150ms ease;
+}
+
+.dismiss:hover {
+  color: var(--heading);
+}

@@ -1,0 +1,35 @@
+/* Tailwind: text-center */
+.root {
+  text-align: center;
+}
+
+/* Tailwind: font-display text-3xl font-semibold tracking-tight */
+.title {
+  font-family: var(--font-display);
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+/* Tailwind: mt-1.5 text-sm text-muted */
+.subtitle {
+  margin-block-start: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: var(--text-muted);
+}
+
+/**
+ * The `small` variant: the accent-colored prompt used for "Interested in
+ * applying?" and "Start your own group today!".
+ * Tailwind: text-center font-display text-xl font-semibold text-accent
+ */
+.small {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: var(--accent);
+}

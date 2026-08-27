@@ -490,6 +490,11 @@ All 13 routes serve. Every page is visually identical to the Vite build in both
 themes. Deep links survive a refresh. No hydration warnings. **Tailwind is
 still installed and still doing all the styling.**
 
+> **Playwright MCP:** good fit for driving this checkpoint directly — navigate
+> to each of the 13 routes plus `/discord` and a deep link refresh, take a
+> snapshot/screenshot per route, and check the console for hydration warnings
+> via `browser_console_messages`. Cheaper than eyeballing every route by hand.
+
 ---
 
 ## 3. Part B — Tailwind → CSS Modules
@@ -681,6 +686,10 @@ this is also why `Reveal` is deliberately not applied inside `ArticleSection`.
 Convert this file, then test at 1023px, 1024px, and 1440px with a tall figure
 adjacent to a short paragraph run.
 
+> **Playwright MCP:** `browser_resize` to each width, then `browser_snapshot`
+> or a screenshot, is a quick way to catch the rail overlapping the prose
+> without opening devtools by hand each time.
+
 ### 3.9 Automating the boring part
 
 Full automation is not realistic — conditional classNames, variant lookup
@@ -705,6 +714,11 @@ No `tailwindcss` in `package.json`. No `className="…"` utility strings left
 (grep for `text-`, `bg-`, `flex `, `px-`). Every page matches the pre-migration
 screenshots in both themes at 640 / 768 / 1024 / 1280 / 1440px. Article rails
 land correctly. Custom cursors still work on content links only.
+
+> **Playwright MCP:** loop `browser_resize` over the five widths and
+> `browser_take_screenshot` each page in both themes (toggle via
+> `ThemeToggle`, or set `data-theme` with `browser_evaluate`) to build the
+> before/after comparison set instead of doing it manually per page.
 
 ---
 
@@ -1096,6 +1110,13 @@ Programs returns real rows from SQL with no CSV in `public/`. A signed-in
 volunteer sees their own hours and cannot see anyone else's. The importer runs
 clean and idempotently. `venueCoordinates.js` and PapaParse are gone.
 
+> **Playwright MCP:** useful here for the IDOR check specifically — sign in as
+> member A (`browser_navigate` through the real Google OAuth flow or a seeded
+> test session), snapshot the Dashboard, then repeat as member B, and diff the
+> two to confirm neither sees the other's hours. It can also drive the
+> Programs search panel end-to-end (fill filters, submit, check the result
+> list) against a seeded dev backend.
+
 ---
 
 ## 5. Part D — Keeping the two services in step
@@ -1199,6 +1220,11 @@ in CI, seed it, then run a small suite against the real pair:
 Keep this suite small and behavioral. Ten tests that run in ninety seconds get
 kept; a hundred that take fifteen minutes get skipped.
 
+> **Playwright MCP:** a reasonable way to author/prototype a couple of these
+> browser-level checks interactively (Programs search against the seeded
+> stack, the frontend/backend round trip) before they're written up as a
+> proper automated test — not a replacement for the CI suite itself.
+
 **3. Post-deploy smoke test (after every production deploy of either
 service).** The same handful of assertions against production, plus a real page
 load. Failure notifies whoever deployed.
@@ -1289,6 +1315,15 @@ easy to destroy during a mechanical rewrite. Re-verify each after Part B.
 - **The Volunteer slideshow's `calc(56.25% + 30px)` padding** — the Slides
   control bar is a fixed pixel height, so no pure aspect ratio works.
 
+> **Playwright MCP:** several of these are scriptable rather than eyeballed —
+> `browser_evaluate` to read `document.querySelector('.protected-email')
+> .textContent` and confirm the address isn't contiguous, `browser_click` the
+> contact toggle and a document-level click to confirm it closes, and
+> `browser_snapshot`/screenshot the Navbar at `lg`/`xl`/below-`lg` widths for
+> the two-stage collapse. Reduced-motion needs `browser_navigate` with the
+> emulated media feature set beforehand, which the MCP tools don't expose
+> directly — that check likely stays manual or moves to a Playwright test file.
+
 ---
 
 ## 7. Suggested phasing
@@ -1349,6 +1384,14 @@ Before calling it done:
 - [ ] Lighthouse on Home, Programs, and Dashboard
 - [ ] Importer re-run produces zero changes (idempotency proof)
 - [ ] A second signed-in account sees only its own hours
+
+> **Playwright MCP:** the most natural place to lean on it for this whole
+> sweep — walking all 13 routes at each width/theme combination, checking
+> `browser_console_messages` for hydration warnings, reading `textContent` for
+> the `ProtectedEmail` check, and tabbing through focus order with
+> `browser_press_key`. It's an interactive driver, though — for something that
+> should run unattended on every deploy, promote the same steps into a real
+> Playwright test file rather than re-running the MCP tools by hand each time.
 
 Infrastructure, new with the VPS:
 

@@ -1,0 +1,199 @@
+/**
+ * Tailwind: sticky top-0 z-40 border-b border-accent/60 bg-surface/95
+ *           backdrop-blur
+ *
+ * `position: relative` is implied by `sticky`, which is what lets ContactPopup
+ * anchor itself with `top: 100%` against this element.
+ */
+.header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+  border-block-end: 1px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+/* Tailwind: mx-auto flex max-w-[1180px] items-center gap-2 px-6 py-3 */
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-inline-size: 1180px;
+  margin-inline: auto;
+  padding: 0.75rem 1.5rem;
+}
+
+/* Tailwind: mr-4 shrink-0 transition-opacity hover:opacity-80 */
+.logo {
+  margin-inline-end: 1rem;
+  flex-shrink: 0;
+  transition: opacity 150ms ease;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+/* Tailwind: h-9 w-auto */
+.logoImage {
+  block-size: 2.25rem;
+  inline-size: auto;
+}
+
+/* ---- Shared item chrome ---- */
+
+.item {
+  border-radius: var(--radius-xs);
+  transition: color 150ms ease;
+}
+
+/* Tailwind: px-2 py-1 text-sm */
+.itemInline {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Tailwind: w-full px-2 py-2 text-left text-base */
+.itemStacked {
+  inline-size: 100%;
+  padding: 0.5rem;
+  text-align: start;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+/**
+ * Buttons in the bar are not ActiveLinks, so they carry their own colors.
+ * ActiveLink supplies its own via ActiveLink.module.css.
+ * Tailwind: text-muted hover:text-heading
+ */
+button.item,
+span.item {
+  color: var(--text-muted);
+}
+
+button.item:hover {
+  color: var(--heading);
+}
+
+/* Tailwind: cursor-default text-heading hover:text-accent */
+.greeting {
+  cursor: default;
+  color: var(--heading);
+}
+
+.greeting:hover {
+  color: var(--accent);
+}
+
+/* ---- Stage 1: primary links, inline from lg up ---- */
+
+/* Tailwind: hidden lg:flex lg:items-center lg:gap-1 */
+.primary {
+  display: none;
+}
+
+@media (--lg) {
+  .primary {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}
+
+/* ---- Stage 2: utility items, inline only from xl up ---- */
+
+/* Tailwind: ml-auto hidden xl:flex xl:items-center xl:gap-1 */
+.utility {
+  display: none;
+}
+
+@media (--xl) {
+  .utility {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin-inline-start: auto;
+  }
+}
+
+/* Tailwind: ml-auto flex items-center xl:ml-0 xl:hidden */
+.themeSlot {
+  display: flex;
+  align-items: center;
+  margin-inline-start: auto;
+}
+
+@media (--xl) {
+  .themeSlot {
+    display: none;
+    margin-inline-start: 0;
+  }
+}
+
+/* Tailwind: rounded-xs p-1.5 text-muted hover:text-heading xl:hidden */
+.hamburger {
+  padding: 0.375rem;
+  border-radius: var(--radius-xs);
+  color: var(--text-muted);
+  transition: color 150ms ease;
+}
+
+.hamburger:hover {
+  color: var(--heading);
+}
+
+@media (--xl) {
+  .hamburger {
+    display: none;
+  }
+}
+
+/* ---- Drawer ---- */
+
+/* Tailwind: border-t border-border bg-surface xl:hidden */
+.drawer {
+  border-block-start: 1px solid var(--border);
+  background: var(--surface);
+}
+
+@media (--xl) {
+  .drawer {
+    display: none;
+  }
+}
+
+/* Tailwind: mx-auto flex max-w-[1180px] flex-col gap-1 px-6 py-4 */
+.drawerInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-inline-size: 1180px;
+  margin-inline: auto;
+  padding: 1rem 1.5rem;
+}
+
+/**
+ * The primary links appear in the drawer only below lg. At lg..xl they are
+ * already inline in the bar, and the drawer holds just the utility items.
+ * Tailwind: flex flex-col gap-1 lg:hidden
+ */
+.drawerPrimary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+@media (--lg) {
+  .drawerPrimary {
+    display: none;
+  }
+}
+
+/* Tailwind: my-2 border-border */
+.divider {
+  margin-block: 0.5rem;
+  border-block-start: 1px solid var(--border);
+}

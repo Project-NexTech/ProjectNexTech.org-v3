@@ -46,7 +46,7 @@ const GROUP_TYPES = [
 /**
  * Region label plus an approximate map position.
  *
- * ⚠️ Coordinates are city-level and INVENTED, like the rest of this file — the
+ * WARNING: Coordinates are city-level and INVENTED, like the rest of this file — the
  * small offsets below just spread co-located groups apart so their markers
  * don't stack. Replace with real positions alongside the real rosters.
  */

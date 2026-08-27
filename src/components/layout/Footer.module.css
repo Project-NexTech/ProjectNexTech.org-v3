@@ -1,0 +1,76 @@
+/**
+ * The blue rule mirrors the navbar's orange one, bracketing the page.
+ * Tailwind: border-t border-accent-alt/60 bg-surface
+ */
+.root {
+  border-block-start: 1px solid color-mix(in srgb, var(--accent-alt) 60%, transparent);
+  background: var(--surface);
+}
+
+/**
+ * Tailwind: mx-auto grid max-w-[1180px] gap-4 px-6 py-6 text-sm
+ *           md:grid-cols-3 md:items-center
+ *
+ * Stacked and centered on narrow screens; three columns from md up, so the
+ * copyright is optically centered against the page rather than the viewport.
+ */
+.inner {
+  display: grid;
+  gap: 1rem;
+  max-inline-size: 1180px;
+  margin-inline: auto;
+  padding: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+@media (--md) {
+  .inner {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+  }
+}
+
+/* Tailwind: flex justify-center gap-5 md:justify-start */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+}
+
+@media (--md) {
+  .nav {
+    justify-content: flex-start;
+  }
+}
+
+/* Tailwind: text-center text-xs text-faint */
+.copyright {
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: var(--text-faint);
+}
+
+/* Tailwind: flex justify-center gap-4 md:justify-end */
+.socials {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+@media (--md) {
+  .socials {
+    justify-content: flex-end;
+  }
+}
+
+/* Tailwind: text-muted transition-colors hover:text-accent */
+.social {
+  color: var(--text-muted);
+  transition: color 150ms ease;
+}
+
+.social:hover {
+  color: var(--accent);
+}

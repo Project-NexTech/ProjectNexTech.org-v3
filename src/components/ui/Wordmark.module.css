@@ -1,0 +1,8 @@
+/**
+ * Inter, always — this is the whole point of the component. Tailwind: font-sans.
+ * It must win even inside a Space Grotesk heading, which it does simply by
+ * being set on the element itself rather than inherited.
+ */
+.root {
+  font-family: var(--font-sans);
+}

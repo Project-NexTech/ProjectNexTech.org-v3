@@ -1,0 +1,38 @@
+/* Tailwind: transition-[opacity,transform] duration-500 ease-out */
+.root {
+  transition-property: opacity, transform;
+  transition-duration: 500ms;
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
+/* Tailwind: translate-y-3 opacity-0 */
+.hidden {
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+
+/* Tailwind: translate-y-0 opacity-100 */
+.shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/**
+ * Tailwind: motion-reduce:transition-none.
+ *
+ * The global reduced-motion block in globals.css already collapses
+ * transition-duration, but this also removes the transform outright — a
+ * transformed element is an `offsetParent`, and leaving one in place would
+ * still perturb any layout measuring `offsetTop` nearby.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+
+  .hidden,
+  .shown {
+    opacity: 1;
+    transform: none;
+  }
+}
