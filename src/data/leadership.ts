@@ -265,6 +265,23 @@ export const DEPARTMENT_MANAGERS: readonly LeadershipMember[] = [
       'Outside of Project NexTech, Aanya loves to help her community through Key Club, volunteer at Girl Scouts summer camps, participate in Feminist Club, and spend time with her family.',
     ],
   }),
+  member({
+    slug: 'raikishori-de',
+    group: 'department-managers',
+    name: 'Raikishori De',
+    roles: ['Communications Manager'],
+    shots: 5,
+    joinDate: 'August 25, 2025',
+    grade: '9th grade',
+    school: 'American High School',
+    region: 'Fremont, CA',
+    linkedin: null,
+    extracurriculars: '',
+    interests: '',
+    paragraphs: [
+      '',
+    ],
+  }),
 ]
 
 /* ==========================================================================
@@ -333,17 +350,16 @@ export const BOARD_OF_DIRECTORS: readonly LeadershipMember[] = [
     group: 'board-of-directors',
     name: 'Praem Kumar',
     roles: ['Senior Member'],
-    shots: 5,
-    /* The live site has no detail line for Praem, only the holding sentence
-       below. Empty strings, not invented values — ProfileModal drops a detail
-       row whose value is falsy, so these simply do not render. */
-    joinDate: '',
-    grade: '',
-    school: '',
-    region: '',
-    linkedin: null,
+    shots: 4,
+    joinDate: 'Joined June 2, 2024',
+    grade: '3rd year',
+    school: 'UC Riverside',
+    region: 'Riverside, CA',
+    linkedin: 'https://www.linkedin.com/in/praemkumar',
     paragraphs: [
-      'Praem Kumar is a senior member of the Board of Directors at Project NexTech. More information about him will be added soon.',
+      'Praem assists with outreach planning and scheduling for Project NexTech, working closely with the commnications department. He also helps create and refine curriculum for STEM programs, including classes taught to student groups.',
+      'He volunteers with Project NexTech to make meaningful STEM education accessible, inspire students to pursue their interests, and grow through leadership and networking with other like-minded mentors.',
+      'Outside of Project NexTech, Praem is a full-time UC Riverside environmental engineering student. In his downtime, he reads, takes photos, and stays engaged with sustainability-focused learning and projects.'
     ],
   }),
 ]
