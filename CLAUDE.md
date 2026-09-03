@@ -6,8 +6,7 @@ This repo is the production rebuild of **projectnextech.org**. It starts as a
 bare `create-next-app` scaffold; the site itself does not exist here yet.
 
 **Start with `NEXTJS_MIGRATION.md`.** It is the plan of record: how the
-finished prototype in `../pnt-site-v3-model/` becomes this site, in phases with
-verification gates.
+finished prototype became this site, in phases with verification gates.
 
 Key decisions already made, so they are not re-litigated:
 
@@ -36,9 +35,6 @@ Companion documents:
 - `initial_prompt_v1.md` — the authoritative design/content spec. Wins on
   anything visual.
 - `LAUNCH_READINESS.md` — content and backend items blocking launch.
-- `../pnt-site-v3-model/CLAUDE.md` — the prototype's architecture notes. The
-  source of the "must not regress" list; it describes a Vite/Tailwind build, so
-  read it as a reference implementation rather than as instructions for here.
 
 ## Phase status
 

@@ -2,15 +2,15 @@
 
 **Status:** planning document. Nothing in this repo has been migrated yet.
 
-This document describes how to turn `pnt-site-v3-model` — a Vite + React
-Router + Tailwind prototype — into the production `projectnextech.org`, built
-on **Next.js 16** with **plain CSS Modules instead of Tailwind**, reading its
-program and volunteer-hours data from **SQL instead of Google Sheets**, and
-**self-hosted on a VPS** rather than statically exported to GitHub Pages.
+This document describes how a Vite + React Router + Tailwind prototype was
+turned into the production `projectnextech.org`, built on **Next.js 16** with
+**plain CSS Modules instead of Tailwind**, reading its program and
+volunteer-hours data from **SQL instead of Google Sheets**, and **self-hosted
+on a VPS** rather than statically exported to GitHub Pages.
 
 It is written to be executed in order. Each part ends with a checkpoint that
-can be verified before moving on, matching the phase-gate convention the model
-repo uses.
+can be verified before moving on, matching the phase-gate convention the
+prototype used.
 
 Read alongside:
 
@@ -20,10 +20,6 @@ Read alongside:
 - `LAUNCH_READINESS.md` (in this repo) — the outstanding content/backend items.
   Several (venue geocoding, the real program database, Google sign-in) are
   resolved *by* this migration and are cross-referenced below.
-- **`CLAUDE.md` in the model repo** (`../pnt-site-v3-model/CLAUDE.md`) — the
-  load-bearing implementation details of the prototype. The "must not regress"
-  list in Part E is drawn from it, but it describes the *Vite/Tailwind* build
-  and is the reference implementation, not a description of this repo.
 - `AGENTS.md` (in this repo) — read it, and the Next docs it points at, before
   writing code. See §2.0.
 
@@ -315,7 +311,7 @@ and add `allowJs: true` so `.jsx` files come across without a rewrite.
 absolute `/media/...` string, so nothing breaks: the 87 media folders, the
 cursor SVGs, the impact-report PDF, and `robots.txt` all keep their URLs.
 
-**The model repo's `CNAME` file does not come across** — DNS is handled at the
+**The prototype's `CNAME` file does not come across** — DNS is handled at the
 VPS now (Appendix A.3), not by GitHub Pages.
 
 ### 2.2 Route mapping
@@ -1790,7 +1786,7 @@ and the expand/migrate/contract discipline that makes independent deploys
 safe.
 
 Either way, **run `npm run lint` and `npm run build` in CI before deploying**,
-not on the VPS as the first sign of a problem. The model repo's existing
+not on the VPS as the first sign of a problem. The prototype's existing
 workflow already does lint-then-build and is a reasonable starting point; only
 the final "upload to Pages" step changes.
 
