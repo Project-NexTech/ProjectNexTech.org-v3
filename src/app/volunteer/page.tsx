@@ -43,10 +43,10 @@ function youtubeId(url: string): string | null {
 const SLIDES_CONTROL_BAR_PX = 38
 
 const CAROUSEL_IN_PERSON = [
-  'Placeholder caption about teaching a class at a local library branch.',
-  'Placeholder caption about setting up materials before students arrive.',
-  'Placeholder caption about mentoring a robotics team after school.',
-  'Placeholder caption about running a booth at a community event.',
+  'Many of our classes are taught at local libraries and community spaces.',
+  'Volunteers prepare materials and set up experiments before students arrive.',
+  'Volunteers mentor students as they design, build, and improve robotics projects. ',
+  'Volunteers teach a strawberry DNA extraction activity to children at a San Diego elementary school STEM fair. ',
 ].map((caption, index) => ({
   src: `/media/volunteer/in-person/in-person-${String(index + 1).padStart(2, '0')}.png`,
   caption,
@@ -139,18 +139,16 @@ export default function VolunteerPage() {
       <Article className={s.article}>
         <ArticleSection title="Why volunteer" id="why-volunteer">
           <P>
-            This is placeholder text about what volunteers get out of running programs with{' '}
-            <Wordmark />. It should run three to five sentences and be honest about the
-            time commitment as well as the payoff.
+            With Project NexTech, volunteers gain real world experience in creating, teaching, and outreach of local STEM education. Active volunteers must commit, at minimum, an average of half an hour each week but there are far more opportunities to get involved. Volunteering with Project NexTech gives students a way to give back to their communities and foster a love of STEM in the next generation, while gaining skills of their own.
           </P>
           <ul className={s.bullets}>
-            <li>Placeholder bullet about teaching experience.</li>
-            <li>Placeholder bullet about verified volunteer hours.</li>
-            <li>Placeholder bullet about leadership opportunities.</li>
-            <li>Placeholder bullet about joining a global community of students.</li>
+            <li><b>Teach real students:</b> Volunteers gain experience teaching students of different ages, learning how to become engaging instructors and adapt their teaching to the needs of each group.</li>
+            <li><b>Earn verified volunteer hours:</b> Project NexTech provides volunteer hours verified by our adult board that can be used for school requirements, service awards, and other programs.</li>
+            <li><b>Grow into leadership:</b> Committed volunteers can apply for leadership opportunities within Project NexTech, where they can lead teams, organize projects, and help shape the organization&apos;s future.</li>
+            <li><b>Join a student community:</b> Volunteers join a global community of more than 300 students working together to reach students across four countries.</li>
           </ul>
           <Highlight>
-            A placeholder highlight line about why students keep volunteering.
+            Project NexTech helps students use their passion for STEM to do good in their communities.
           </Highlight>
           <Figure
             src="/media/volunteer/why-volunteer/why-volunteer-01.png"
@@ -158,57 +156,49 @@ export default function VolunteerPage() {
           />
 
           <P>
-            This is a placeholder closing paragraph for this section, pointing at the two
-            ways to contribute described below.
+            Once you decide to volunteer, there are two different ways to contribute to Project NexTech&apos;s mission. 
           </P>
         </ArticleSection>
 
         <ArticleSection title="Ways to contribute in person" id="in-person">
           <P>
-            This is placeholder text about teaching programs in person at libraries,
-            schools, and community spaces. Two to three sentences.
+            One of Project NexTech&apos;s primary goals is to expand access to engaging STEM education, particularly for students who may have limited access to similar opportunities. We accomplish much of this by running programs at libraries, schools, and community centers. Student volunteers help set up and teach interactive classes, guiding students through experiments, projects, and challenges in an environment where they can build, innovate, ask questions, and learn by doing. 
           </P>
           <RailCarousel items={CAROUSEL_IN_PERSON} />
 
-          <Highlight>A placeholder highlight line about in-person teaching.</Highlight>
+          <Highlight>Volunteers lead hands-on activities that make STEM subjects approachable, interactive, and exciting for our students.</Highlight>
 
           <P>
-            This is a placeholder paragraph about assisting rather than leading a class,
-            which is how most volunteers start out.
+                Most volunteers begin by assisting a class alongside a more experienced instructor. Most classes have multiple instructors, ensuring that both students and volunteer instructors get more in-person involvement as they learn.
           </P>
 
-          <Highlight>A second placeholder highlight line about in-person work.</Highlight>
+          <Highlight>In-person volunteers engage with students and their families, making a positive impact on communities around the world.</Highlight>
 
           <P>
-            This is a placeholder paragraph about helping run events, prepare materials,
-            and set up venues before a program begins.
+            Volunteers also prepare materials, set up classrooms, organize supplies, and assist with experiments throughout each program. Beyond our recurring classes, volunteers can represent Project NexTech at community events such as STEM fairs, where they lead short activities for local families, introduce students to new STEM concepts, and connect with prospective participants.
           </P>
         </ArticleSection>
 
         <ArticleSection title="Ways to contribute online" id="online">
           <P>
-            This is placeholder text about the departments that operate entirely online —
-            curriculum, social media, business, communications, and software.
+            Several Project NexTech departments operate primarily or entirely online, including curriculum, social media, business, communications, outreach, and software. These teams meet and collaborate through Discord and play an essential role in making our programs possible. Online volunteers help design what we teach, organize where we teach it, communicate with the communities we serve, and build the systems that keep the organization running. 
           </P>
           <RailCarousel items={CAROUSEL_ONLINE} />
 
-          <Highlight>A placeholder highlight line about remote contribution.</Highlight>
+          <Highlight>Curriculum volunteers design each class to be age-appropriate, practical, and engaging for the students we serve.</Highlight>
 
           <P>
-            This is a placeholder paragraph about writing and reviewing curriculum for the
-            courses other volunteers teach.
+            Project NexTech&apos;s curricula are created and maintained by our volunteers. Curriculum volunteers collaborate to plan, write, test, and review lessons for the courses taught by our instructors. Our curriculum is regularly reviewed using feedback from completed programs, allowing volunteers to identify what worked, improve activities that did not, and continuously refine each course for future students.
           </P>
 
           <P>
-            This is a placeholder paragraph about teaching programs online to students in
-            regions where we have no in-person presence.
+            Volunteers can also teach selected programs online in regions where Project NexTech does not yet have an in-person presence. These classes are taught through video calls and give volunteers the opportunity to teach subjects particularly well suited to an online format, such as programming.
           </P>
 
-          <Highlight>A second placeholder highlight line about online work.</Highlight>
+          <Highlight>Outreach volunteers maintain ongoing relationships with their communities in order to make Project NexTech&apos;s classes known to nearby students.</Highlight>
 
           <P>
-            This is a placeholder paragraph about building and maintaining the tools the
-            organization runs on, including this website.
+            A team of volunteers builds and maintains the technology that Project NexTech relies on, including this website, volunteer databases, internal tools, and other software used throughout the organization. These volunteers apply and expand their programming and technical skills while building systems that support Project NexTech&apos;s day-to-day operations and continued growth.
           </P>
         </ArticleSection>
       </Article>

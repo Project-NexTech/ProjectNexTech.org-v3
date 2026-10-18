@@ -99,4 +99,12 @@ export const PARTNERS: readonly Partner[] = [
     description:
       'Our partner in Nuevo León, Mexico, supporting F.I.R.S.T. Robotics initiatives and STEM classes in the Monterrey region. They make our programming in Mexico possible and help us reach students far outside Southern California.',
   },
+  {
+    name: 'SweetGeeks Foundation',
+    tier: 'silver',
+    url: 'https://www.sweetgeeksfoundation.org/',
+    logo: '/media/about/partners/partner-sweetgeeks-foundation.png',
+    description:
+      'Placeholder',
+  },
 ]

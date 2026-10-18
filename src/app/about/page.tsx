@@ -12,7 +12,6 @@ import ImagePlaceholder from '@/components/ui/ImagePlaceholder'
 import PageHeader from '@/components/ui/PageHeader'
 import Reveal from '@/components/ui/Reveal'
 import SectionHeader from '@/components/ui/SectionHeader'
-import Wordmark from '@/components/ui/Wordmark'
 import { cx } from '@/lib/cx'
 import { PARTNERS, type Partner } from '@/data/partners'
 import { PARTNER_TIERS, type PartnerTone } from '@/constants'
@@ -92,72 +91,54 @@ export default function AboutPage() {
       <Article>
         <ArticleSection title="About us" id="about-us">
           <P>
-            This is placeholder text introducing who we are and what we do. It should run four
-            or five sentences and give a reader arriving cold a clear sense of the
-            organization before they go any further. Describe the students we teach, the
-            volunteers who teach them, and the scale we operate at today. Keep the tone plain
-            and confident rather than promotional. Close with what makes the model unusual —
-            that it is run end to end by students.
+Project NexTech is an international student-led nonprofit that creates and teaches free STEM programs for students. Our high school and college volunteers develop curriculum, organize partnerships, prepare materials, and teach classes covering subjects from engineering and programming to biology, physics, and research. Since 2023, our programs have reached thousands of students through hundreds of classes, workshops, and mentoring opportunities. We work with schools, libraries, community organizations, and other partners to make those opportunities accessible at no cost to students or our hosts. What makes our model unusual is that students do nearly every part of the work themselves, from developing a lesson to putting it in front of a classroom.
           </P>
           <RailCarousel items={ABOUT_CAROUSEL} />
         </ArticleSection>
 
         <ArticleSection title="History" id="history">
           <P>
-            This is placeholder text for the opening of our history, covering the founding of{' '}
-            <Wordmark /> and the very first program we ever ran. It should say who started the
-            organization, where, and what problem they were trying to solve. Three to six
-            sentences is the right length for each paragraph in this section.
+            Project NexTech began on May 19, 2023, when eight students at Francis Parker School in San Diego decided they wanted to teach STEM beyond their own classrooms. The group voted on what kind of service project to pursue and chose to create STEM workshops for younger students. Their first program was held at Mira Mesa Library, where four volunteers taught just two students. Those first classes focused on Java and Python and established the fundamental principle that still drives Project NexTech today: students using what they know to teach other students.
           </P>
           <Figure
             src="/media/about/history/history-01.png"
-            caption="Placeholder caption for a photo of the first Project NexTech program ever run."
+            caption="Project NexTech&apos;s first program at Mira Mesa Library, where four student volunteers taught a class of two students."
           />
 
           <P>
-            This is a placeholder paragraph covering the earliest period of growth, when the
-            organization moved from a single classroom to a recurring schedule of programs.
-            Describe the first partnerships, the first volunteers who joined from outside the
-            founding group, and what changed once programs ran regularly.
+What began as an occasional workshop gradually became a recurring program. Project NexTech expanded into additional subjects, recruited volunteers beyond its original Francis Parker core group, and began working with more libraries and community organizations throughout San Diego. By early 2024, an agreement with the City of San Diego made it possible to run free programs throughout the San Diego Public Library system, giving volunteers consistent places to teach and families familiar places to attend.
           </P>
           <Figure
             src="/media/about/history/history-02.png"
-            caption="Placeholder caption for a photo from our earliest period of growth."
+            caption="Early Project NexTech programs established"
           />
 
           <Highlight>
-            A placeholder highlight line marking a turning point in the organization&rsquo;s
-            history.
+            A placeholder highlight line, drawn from somewhere in this section.
           </Highlight>
 
           <P>
-            This is a placeholder paragraph about expanding beyond San Diego, both to other
-            cities in the United States and to programs run internationally. Cover how remote
-            programs made that possible and which regions came first.
+As the organization grew, Project NexTech also began expanding beyond San Diego. Online programs, and remote collaboration allowed volunteers to teach and organize from different communities. Local groups also gave students the ability to bring Project NexTech programs into their own regions. Programs and volunteers eventually expanded across the United States and internationally, reaching students in communities including Mexico and Bangladesh and many others around the world.
           </P>
           <Figure
             src="/media/about/history/history-03.png"
-            caption="Placeholder caption for a photo from our first programs outside San Diego."
+            caption="Project NexTech&apos;s growth beyond San Diego allowed volunteers to bring free STEM education to new communities."
           />
 
           <P>
-            This is a placeholder paragraph about formalizing the organization — incorporating
-            as a nonprofit, establishing the Executive Committee and boards, and writing the
-            Constitution that still governs how decisions get made.
+However, this same growth also required Project NexTech to become a more formal organization. In 2024, Project NexTech incorporated as a California nonprofit and later a federal 501(c)(3) tax-exempt nonprofit. As these operations expanded, the organization also established a governing hierarchical structure including its student Executive Committee, Board of Directors, and adult Board of Advisors.
           </P>
           <Figure
             src="/media/about/history/history-04.png"
-            caption="Placeholder caption for a photo from the period when the organization formalized."
-          />
+            caption="As Project NexTech grew, its student leadership developed the organization structure needed to support programs at a larger scale."
+          /> { /* Add an image of the chart from the organization intro slideshow */}
 
           <Highlight>
             A second placeholder highlight line, drawn from somewhere later in this section.
           </Highlight>
 
           <P>
-            This is a placeholder paragraph bringing the history up to the present day, and
-            pointing at where the organization is heading next. It should end on the work
-            still ahead rather than on past achievements.
+Today dozens of student volunteers contribute to Project NexTech through teaching, curriculum development, outreach, communications, software, business operations, and leadership. Together, they support hundreds of programs and a growing collection of STEM courses used in communities around the world. But scale is not our end goal. Our next challenge is making each program more effective, making our curriculum better, and building an organization that allows students in more communities to create lasting STEM opportunities of their own.
           </P>
           <Figure
             src="/media/about/history/history-05.png"
@@ -167,9 +148,7 @@ export default function AboutPage() {
 
         <ArticleSection title="Philosophy" id="philosophy">
           <P>
-            This is placeholder text about how we think STEM should be taught. Cover why our
-            programs are project-based and hands-on rather than lecture-driven, and what we
-            think students actually retain from a single session. Three to five sentences.
+We believe students learn STEM best when they have something to do with it. Instead of building programs around long school-like lectures, our courses use multiple experiments, engineering challenges, programming projects, demonstrations and hands-on activities to turn concepts into something students can really test for themselves. We don&apos;t expect any of our students to master a field after a single session. Instead, we want them to leave having understood something new about the world, with a reason to keep learning.
           </P>
 
           <Highlight>
@@ -177,15 +156,11 @@ export default function AboutPage() {
           </Highlight>
 
           <P>
-            This is a placeholder paragraph about why the organization is run by students
-            rather than adults, and what that changes about how our classes feel to the
-            students attending them.
+We are intentionally student-led as well. Our volunteers are often close enough in age to the students they teach to remember what made a subject confusing or exciting when they first encountered it themselves. That makes teaching less like a formal lecture and more like an older student peer helping another understand something they care about. At the same time, we give all of our volunteers genuine responsibility in order to develop them as instructors and leaders while creating something useful for other students.
           </P>
 
           <P>
-            This is a placeholder paragraph about access — why every program is free, what
-            &ldquo;underserved&rdquo; means in practice for us, and how the partnerships
-            described below make that possible.
+Access is equally important to our teaching model. Project NexTech programs are free because cost should not determine whether a student gets to explore engineering, programming, science, or another STEM field. Limited access can take many forms, such as expensive extracurricular programs, a lack of nearby opportunities, limited school resources, transportation barriers, or simply not knowing where to begin. By working with libraries, schools, and community organizations, we can bring programs into places families already know and use while our volunteers and supporters help provide the instruction, curriculum, and materials to provide to those who may not have these opportunities elsewhere.
           </P>
         </ArticleSection>
       </Article>

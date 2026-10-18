@@ -213,6 +213,30 @@ To build locally while nvm's default is 23:
 nvm use 22.13.1     # needs an elevated shell on nvm4w
 ```
 
+## Do not upgrade to ESLint 10 yet
+
+Tried 2026-09-03, reverted. `npm install eslint@10` resolves and installs with
+no `ERESOLVE` conflicts, which looks like a green light — it is not. Running
+`eslint .` afterward throws before linting a single file:
+
+```
+TypeError: Error while loading rule 'react/display-name': contextOrFilename.getFilename is not a function
+```
+
+ESLint 10 removed the deprecated `context.getFilename()` API.
+`eslint-config-next@16.3.3` pins `eslint-plugin-react@^7.37.0`, and its latest
+published release (`7.37.5`) still calls that removed method in its React-
+version detection. There is no newer `eslint-plugin-react` release that fixes
+this, and even the unreleased `eslint-config-next@16.4.0-canary.15` still pins
+the same broken `eslint-plugin-react` range — so this is an upstream gap, not
+something fixable from this repo's config.
+
+Stay on `eslint@^9` until `eslint-config-next` ships against a
+`eslint-plugin-react` that supports ESLint 10. Re-check by running
+`npm view eslint-plugin-react versions` for anything past `7.37.5`, or
+`npm view eslint-config-next@latest dependencies` for a bumped range, before
+trying again.
+
 ## Phase 2 notes
 
 Delivered: all 13 primitives as `.tsx` + `.module.css` — `Icon`, `Reveal`,

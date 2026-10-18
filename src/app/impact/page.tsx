@@ -65,7 +65,7 @@ export default function ImpactPage() {
     <div>
       <PageHeader
         title="See our impact"
-        subtitle="This is placeholder subtitle text describing how we measure the reach of our programs and what the numbers below actually count."
+        subtitle="We measure our impact through the students who participate in our programs, the volunteers who work with us to make the programs possible, and the communities where they occur. Our figures are compiled from extensive program records, robust volunteer racking, and live reports from Project NexTech teams operating in different regions. Behind every number is an individual student who chose to spend time with us learning, teaching, building, engaging or sharing STEM with others."
       />
 
       {/* Full width of the content container, matching the navbar's bounds. */}
@@ -89,13 +89,11 @@ export default function ImpactPage() {
       <Article className={s.article}>
         <ArticleSection title="Impact on our students" id="students">
           <P>
-            This is placeholder text about what students take away from our programs. It
-            should run three to six sentences and be specific about what changes for a
-            student between walking in and walking out.
+Project NexTech gives students opportunities to experience STEM by doing it. During our programs, students move from being introduced to a concept to applying it through an experiment, engineering challenge, piece of code, model, or project of their own. Our goal is not for a student to master an entire subject in a few hours; it is for them to understand something they did not understand before, become more comfortable experimenting with it, and leave with a reason to continue exploring. Because our programs are free, students can try unfamiliar subjects without cost becoming another barrier to getting started.
           </P>
           <Figure
             src="/media/impact/students/students-01.png"
-            caption="Placeholder caption for a photo of students during a program."
+            caption="More than X,XXX students have participated in Project NexTech programs since 2023."
           />
 
           <Highlight>
@@ -103,8 +101,7 @@ export default function ImpactPage() {
           </Highlight>
 
           <P>
-            This is a placeholder paragraph about the students who come back for multiple
-            courses, and what we see change across a series rather than a single session.
+Many of our courses are structured deliberately as multi-session series in which students build on concepts and projects over several weeks. Returning students can take on increasingly difficult challenges, ask more advanced questions, and become more independent as instructors shift from demonstrating a process to helping students solve problems themselves.
           </P>
 
           <Highlight>
@@ -123,16 +120,14 @@ export default function ImpactPage() {
 
         <ArticleSection title="Building volunteers and leaders" id="volunteers">
           <P>
-            This is placeholder text about what running programs does for the volunteers
-            themselves, who are students too. Three to six sentences.
+The students teaching our programs are learning too. Project NexTech gives high school and college volunteers real responsibility for explaining technical ideas, working with younger students, preparing activities, communicating with community partners, and following through on commitments to a team. Our volunteers are trained from the ground up with an experienced instructor, allowing the programs to create learning opportunities for both attending students and student volunteers.
           </P>
           <RailCarousel items={VOLUNTEER_CAROUSEL} />
 
           <Highlight>A placeholder highlight line about volunteer growth.</Highlight>
 
           <P>
-            This is a placeholder paragraph about how volunteers move into department and
-            leadership roles, and what they take on when they do.
+Volunteers are able to take on more responsibility as they gain experience. An instructor may begin by assisting with an activity, later lead a class, help improve the curriculum they taught, coordinate programs with a community partner, or move into a department or leadership position
           </P>
 
           <Highlight>
@@ -147,9 +142,7 @@ export default function ImpactPage() {
 
         <ArticleSection title="Shaping better communities" id="communities">
           <P>
-            This is placeholder text about what changes for a neighborhood when free STEM
-            programming runs there consistently. It should cover the role our library and
-            school partners play in making that possible.
+Project NexTech programs are built around the community spaces that students and families already use. Libraries, schools, and community organizations provide trusted and accessible places to learn, while Project NexTech provides volunteers, curriculum, and hands-on programming at no cost to participating students. When programs return to the same location, families gain access to STEM opportunities without needing to seek out a new organization or pay for a separate extracurricular program each time.
           </P>
           <Figure
             src="/media/impact/communities/communities-01.png"
@@ -157,15 +150,13 @@ export default function ImpactPage() {
           />
 
           <P>
-            This is a placeholder paragraph about the regions we have reached and what we
-            have learned about starting up somewhere new.
+Since beginning in San Diego in 2023, Project NexTech has expanded through both locally organized programs and online collaboration. Our programs have now reached students across more than XX countries and over XXX regions. Each new community is different, so expansion depends on local volunteers and partners who understand where students gather, what opportunities already exist, and what kinds of programs are actually useful there. Instead of assuming that one model works everywhere, we use a common curriculum and organizational framework while allowing local teams to adapt how programs are delivered.
           </P>
         </ArticleSection>
 
         <ArticleSection title="Quarterly impact reports" id="reports">
           <P>
-            This is placeholder text explaining what goes into a quarterly impact report
-            and how we compile the figures. Three to four sentences.
+Our quarterly impact reports provide a more detailed record of Project NexTech&apos;s work than the totals shown above. Each report summarizes A, B, C, D,E, F.  Figures are compiled from Project NexTech&apos;s internal program and volunteer records and reviewed before publication. Publishing these reports also gives us a consistent record to submit to our sponsors and donors.
           </P>
           <Note title="All reports">
             <ul className={s.reports}>
@@ -194,8 +185,7 @@ export default function ImpactPage() {
           </Note>
 
           <P>
-            This is a placeholder paragraph about how far back the reports go and what
-            changed in how we counted things between the earliest ones and today.
+As the organization has grown, Project NexTech’s methods for recording impact have become more robust and more structured. Earlier records may contain less detail than newer reports, and some categories or definitions have changed as our tracking systems developed. When comparing reports from different periods, readers should therefore use the methodology described in each individual report rather than assuming that every metric was collected in exactly the same way.
           </P>
         </ArticleSection>
       </Article>
